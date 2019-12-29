@@ -1,0 +1,46 @@
+---
+layout: main
+---
+<article class="article-page">
+  <div class="page-content">
+    <div class="wrap-content">
+      <header class="header-page">
+        <h1 class="page-title">{{page.title}}</h1>
+        <div class="page-date"><span>{{page.date | date: '%Y, %b %d'}}&nbsp;&nbsp;&nbsp;&nbsp;</span></div>
+      </header>
+      {% if page.img %}<div class="page-image"><img class="page-image" src={{ "/assets/img/" | prepend: site.baseurl | append : page.img}} alt="{{page.title}}"></div>{% endif %}
+      {{ content }}
+      <h2>Let's connect!</h2>
+      <p>You can find me on <a href="https://www.linkedin.com/in/nalexn/" target="_blank">LinkedIn</a> and <a href="https://twitter.com/nallexn" target="_blank">Twitter</a>. You can also subscribe to <a href="{{ site.url }}/feed.xml" target="_blank">RSS feed</a></p>
+      <div style="width:0px; height:30px; display: block;"></div>
+      <h2>Most recent articles</h2>
+      <div class="content-box recent clearfix" style="padding: 20px 10px;">
+        {% assign first_posts = site.posts | slice:0, 5 %}
+        {% for post in first_posts %}
+          {% if post.title != page.title %}
+          <article class="post">
+            {% if post.img %}
+              <a class="post-thumbnail" style="background-image: url({{"/assets/img/" | prepend: site.baseurl | append : post.img}})" href="{{post.url | prepend: site.baseurl}}"></a>
+            {% else %}
+            {% endif %}
+            <div class="post-content">
+              <h2 class="post-title"><a href="{{post.url | prepend: site.baseurl}}">{{post.title}}</a></h2>
+              <p></p>
+              <span class="post-date">{{post.date | date: '%Y, %b %d'}}&nbsp;&nbsp;&nbsp;—&nbsp;</span>
+              <span class="post-words">{% capture words %}{{ post.content | number_of_words }}{% endcapture %}{% unless words contains "-" %}{{ words | plus: 250 | divided_by: 250 | append: " minute read" }}{% endunless %}</span>
+            </div>
+          </article>
+          {% endif %}
+        {% endfor %}
+        <article class="post">
+          <a class="post-thumbnail" style="background-image: url({{"/assets/img/launch_001.jpg" | prepend: site.baseurl}})" href="{{"/" | prepend: site.baseurl}}"></a>
+          <div class="post-content">
+            <h2 class="post-title"><a href="{{"/" | prepend: site.baseurl}}">Browse All Articles</a></h2>
+            <p></p>
+            <span class="post-date">Top iOS programming stuff, no kidding!</span>
+          </div>
+        </article>
+      </div>
+    </div> <!-- End Wrap Content -->
+  </div> <!-- End Page Content -->
+</article> <!-- End Article Page -->
