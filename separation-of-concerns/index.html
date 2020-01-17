@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-96224610-1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'UA-96224610-1');
+  </script>
+	<meta charset="utf-8">
+	<title>Separation of Concerns in Software Design - Alexey Naumov</title>
+
+  <!-- Edit site and author settings in `_config.yml` to make the social details your own -->
+
+    <meta content="Alexey Naumov" property="og:site_name">
+  
+    <meta content="Separation of Concerns in Software Design" property="og:title">
+  
+  
+    <meta content="article" property="og:type">
+  
+  
+    <meta content="Applying the fundamental Computer Science principles for improving the quality of the software at all levels" property="og:description">
+  
+  
+    <meta content="http://nalexn.github.io/separation-of-concerns/" property="og:url">
+  
+  
+    <meta content="2020-01-16T08:30:00+03:00" property="article:published_time">
+    <meta content="http://nalexn.github.io/about/" property="article:author">
+  
+  
+    <meta content="http://nalexn.github.io/assets/img/layers_001.jpg" property="og:image">
+  
+  
+    
+  
+  
+    <meta name="keywords" content="iOS, swift, SOLID, Coupling, Cohesion, Loose, module, programming, pattern, principle, system, repository, computer, science, cs, realeasing, Zalgo">
+    
+    <meta content="iOS" property="article:tag">
+    
+    <meta content="swift" property="article:tag">
+    
+    <meta content="SOLID" property="article:tag">
+    
+    <meta content="Coupling" property="article:tag">
+    
+    <meta content="Cohesion" property="article:tag">
+    
+    <meta content="Loose" property="article:tag">
+    
+    <meta content="module" property="article:tag">
+    
+    <meta content="programming" property="article:tag">
+    
+    <meta content="pattern" property="article:tag">
+    
+    <meta content="principle" property="article:tag">
+    
+    <meta content="system" property="article:tag">
+    
+    <meta content="repository" property="article:tag">
+    
+    <meta content="computer" property="article:tag">
+    
+    <meta content="science" property="article:tag">
+    
+    <meta content="cs" property="article:tag">
+    
+    <meta content="realeasing" property="article:tag">
+    
+    <meta content="Zalgo" property="article:tag">
+    
+  
+
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:site" content="@">
+    <meta name="twitter:creator" content="@nallexn">
+  
+    <meta name="twitter:title" content="Separation of Concerns in Software Design">
+  
+  
+    <meta name="twitter:url" content="http://nalexn.github.io/separation-of-concerns/">
+  
+  
+    <meta name="twitter:description" content="Applying the fundamental Computer Science principles for improving the quality of the software at all levels">
+  
+
+	<meta name="description" content="Applying the fundamental Computer Science principles for improving the quality of the software at all levels">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+	<meta property="og:image" content="">
+  <link rel="icon" sizes="16x16" href="/assets/img/favicon/favicon.ico">
+  <link rel="icon" sizes="32x32" href="/assets/img/favicon/favicon-32.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="/assets/img/favicon/favicon-114.png">
+	<!-- Chrome, Firefox OS and Opera -->
+	<meta name="theme-color" content="#263959">
+	<!-- Windows Phone -->
+	<meta name="msapplication-navbutton-color" content="#263959">
+	<!-- iOS Safari -->
+	<meta name="apple-mobile-web-app-status-bar-style" content="#263959">
+	<!-- Google Fonts -->
+	<link href="https://fonts.googleapis.com/css?family=PT+Serif:400,700" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css?family=Lato:300,400,700" rel="stylesheet">
+	<!-- Font Awesome -->
+	<link rel="stylesheet" href="/assets/fonts/font-awesome/css/font-awesome.min.css">
+	<!-- Styles -->
+	<link rel="stylesheet" href="/assets/css/main.css?v=2">
+</head>
+
+<body>
+  <div class="wrapper">
+    <aside class="sidebar">
+  <header>
+    <div class="about">
+      <div class="author-logo">
+      <span class="hover-message">Let's connect on LinkedIn!</span>
+      <div class="cover-author-image">
+        <a href="https://in.linkedin.com/in/nalexn" target="_blank"><img src="/assets/img/profile-image.jpg" alt="Alexey Naumov"></a>
+      </div>
+      </div>
+      <div class="author-name">Alexey Naumov</div>
+      <a href="/"><img src="/assets/img/content_00.png" alt="" style="-webkit-border-radius: 0%; border-radius: 0%;"></a>
+    </div>
+  </header> <!-- End Header -->
+  <footer>
+    <section class="contact">
+      <h3 class="contact-title">Links</h3>
+      <ul>
+        <li><a href="https://twitter.com/nallexn" target="_blank"><i class="fa fa-twitter" aria-hidden="true"></i></a></li>
+        <li><a href="https://in.linkedin.com/in/nalexn" target="_blank"><i class="fa fa-linkedin"></i></a></li>
+        <li><a href="https://github.com/nalexn" target="_blank"><i class="fa fa-github"></i></a></li>
+        <li><a href="https://stackoverflow.com/users/2923345?tab=profile" target="_blank"><i class="fa fa-stack-overflow" aria-hidden="true"></i></a></li>
+        <li><a href="http://nalexn.github.io/feed.xml" target="_blank"><i class="fa fa-rss"></i></a></li>
+      </ul>
+    </section> <!-- End Section Contact -->
+    <div class="copyright">
+      <p>2020 &copy; Alexey Naumov</p>
+    </div>
+  </footer> <!-- End Footer -->
+</aside> <!-- End Sidebar -->
+<div class="content-box clearfix">
+  <article class="article-page">
+  <div class="page-content">
+    <div class="wrap-content">
+      <header class="header-page">
+        <h1 class="page-title">Separation of Concerns in Software Design</h1>
+        <div class="page-date"><span>2020, Jan 16&nbsp;&nbsp;&nbsp;&nbsp;</span></div>
+      </header>
+      <div class="page-image"><img class="page-image" src=/assets/img/layers_001.jpg alt="Separation of Concerns in Software Design"></div>
+      <p>The <a href="https://en.wikipedia.org/wiki/Separation_of_concerns">separation of concerns</a> (SoC) is one of the most fundamental principles in software development.</p>
+
+<p>It is so crucial that 2 out of 5 SOLID principles (Single Responsibility and Interface Segregation) are direct derivations from this concept.</p>
+
+<p>The principle is simple: don’t write your program as one solid block, instead, break up the code into chunks that are finalized tiny pieces of the system each able to complete a simple distinct job.</p>
+
+<p>In this article, I elaborate on applying this profound principle at all levels of abstraction: from the programming code inside each function and the design of the modules to the overall app’s architecture, all for achieving the characteristics of what we call a qualitative software.</p>
+
+<h3 id="soc-for-programming-functions">SoC for programming functions</h3>
+
+<p>If we take the lowest level (the actual programming code),
+SoC instructs us to avoid writing long complex functions. When the function starts to <a href="https://martinfowler.com/bliki/FunctionLength.html">bloat up in size</a>, this is the red flag that the method is possibly taking care of too many things at once.</p>
+
+<p>In such a case SoC pushes us to <a href="https://refactoring.guru/extract-method">refactor</a> it, turning into a more laconic and descriptive revision. During this process, parts of the original algorithm get exported and encapsulated in separate smaller functions with a private access level. We gain the code clarity, and chunks of the algorithm eventually become reusable by other parts, even if we initially didn’t expect this to happen.</p>
+
+<h3 id="soc-for-modules">SoC for modules</h3>
+
+<p>At a bit higher level, this principle tells us to group the functions under self-contained modules, each responsible for the fulfillment of a single set of tasks that have a clear logical correlation.</p>
+
+<p>The process very much resembles what we had to do for functions: <em>estrange less-closely related functionality and group up the features serving the same distinct purpose</em>.</p>
+
+<h3 id="cohesion-and-coupling">Cohesion and Coupling</h3>
+
+<p>The application of the Separation of Concerns involves two processes: reduction of <a href="https://en.wikipedia.org/wiki/Coupling_(computer_programming)">coupling</a> and increasing <a href="https://en.wikipedia.org/wiki/Cohesion_(computer_science)">cohesion</a>.</p>
+
+<p>Cohesion is the measure of similarity by the set of duties, level of details, and locality. For example, functions <code class="language-plaintext highlighter-rouge">drawCircle</code> and <code class="language-plaintext highlighter-rouge">drawTriangle</code> are cohesive enough to belong to the same module responsible for drawing, and it <em>feels</em> natural to put these two functions close to each other in the code (high similarity ~ high cohesion).</p>
+
+<p>Coupling, on the other hand, is the measure of dependence of the part on the rest of the system (low dependence ~ loose coupling).</p>
+
+<p>The aforementioned <code class="language-plaintext highlighter-rouge">drawCircle</code> and <code class="language-plaintext highlighter-rouge">drawTriangle</code> can be used by another function <code class="language-plaintext highlighter-rouge">drawCybertruck</code>. We can be tempted to put this function in the drawing module as well, but <code class="language-plaintext highlighter-rouge">drawCyberthuck</code> may be dependant on the physics engine and the external state. So this will make the whole drawing module much less reusable and closely coupled with a few other components.</p>
+
+<p>You can tell that primitive drawing functions and <code class="language-plaintext highlighter-rouge">drawCyberthuck</code> belong to different levels of abstraction and logic complexity, thus they need to reside in different modules.</p>
+
+<p>And if at some point we decide to use the drawing module in another project - there will be no dependency on the physics engine, so we’ll be able to extract it easier.</p>
+
+<p>A quick way to remember which attribute should be increased or decreased:</p>
+
+<ul>
+  <li>Decoupling is good - so we need to aim for a loose coupling</li>
+  <li>Cohesive code is good - we need to aim for a high cohesion</li>
+</ul>
+
+<p>A good example of the code with high cohesion (low dispersion) is the use of closure callbacks instead of the delegate methods. Consider the code for sending a networking request:</p>
+
+<div class="language-swift highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+</pre></td><td class="rouge-code"><pre><span class="c1">// configuring and sending the request</span>
+<span class="n">session</span><span class="o">.</span><span class="nf">send</span><span class="p">(</span><span class="nv">request</span><span class="p">:</span> <span class="kt">URLRequest</span><span class="p">)</span> <span class="p">{</span> <span class="n">response</span> <span class="k">in</span>
+    <span class="c1">// handling the response</span>
+<span class="p">}</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>Imagine if URLSession had a delegate-based API for making the requests: all the responses would be delivered to a single function <code class="language-plaintext highlighter-rouge">handle(response: URLResponse, for request: URLRequest)</code></p>
+
+<p>This would make the networking much more error-prone and tedious, as the logic for handling all the responses would now have to be tied to that one function.</p>
+
+<p>With the callback-based API, the action and the result of the action are handled in one place, making it much easier to track the execution flow.</p>
+
+<p>If we need to jump around between the functions or modules as we’re following the logic of the algorithm, this means the code has <strong>low cohesion</strong>, which is often referred to as a <a href="https://www.techopedia.com/definition/9476/spaghetti-code">Spaghetti code</a>.</p>
+
+<h3 id="benefits-of-the-loose-coupling-and-high-cohesion">Benefits of the Loose Coupling and High Cohesion</h3>
+
+<p>Adherence to the principle of Separation of Concerns helps to improve numerous characteristics of the codebase:</p>
+
+<ol>
+  <li>Better code clarity. It is much easier to understand what is going on in the program when each module has a concise and clear API with a logically scoped set of methods.</li>
+  <li>Better code reusability (<a href="https://en.wikipedia.org/wiki/Don%27t_repeat_yourself">DRY principle</a>). The main benefit of reusing the code is reduced maintenance costs. Whenever you need to extend the functionality or fix a bug - it’s much less painful to do when you’re certain it appears in one place only.</li>
+  <li>Better testability. Independent modules with properly scoped functionality and isolation from the rest of the app are a breeze to test. You don’t need to set up the entire environment to see how your module works - it is sufficient to replace neighboring real modules with dummy mocks or fake data sources. This way you can test the module as the black box by verifying just the output, or as the white box by also seeing which methods are being called on the connected modules (<a href="https://en.wikipedia.org/wiki/Behavior-driven_development">BDD</a>).</li>
+  <li>Faster project evolution. Whether it’s a new feature or an update of the existing one, isolation of the modules helps with scoping out the areas of the program that may be affected by the change, thus speeding up the development.</li>
+  <li>It is easier to organize simultaneous development by multiple engineers. They just need to agree on which module they are working on to make sure they don’t interfere with each other. Only the update of a module’s API can be a flag for explicit notifying other developers, while most of the changes can be added without immediate attention from the other contributors. When coupled with good test coverage, the parallel development becomes as efficient as the cumulative productivity of each individual engineer working solely (<a href="https://en.wikipedia.org/wiki/The_Mythical_Man-Month">it is usually slower</a>).</li>
+</ol>
+
+<p>As you can see, coupling and cohesion are the characteristics that ultimately affect the <strong>convenience</strong> of working with the code from the programmer’s perspective.</p>
+
+<h3 id="soc-for-the-systems-design">SoC for the system’s design</h3>
+
+<p>For a bunch of modules with distinct responsibilities and clear purpose we still need to outline a global strategy to how the modules should refer to each other.</p>
+
+<p>If we don’t introduce this strategy we may end up with a system with entangled relations and hard-to-track data flows.</p>
+
+<div style="max-width:600px; display: block; margin-left: auto; margin-right: auto;"><img src="http://nalexn.github.io/assets/img/spaggeti-code_001.png" /></div>
+
+<p>The primary goal of the system’s design is to outline the boundaries for the module’s awareness of each other.</p>
+
+<p>Every existing architectural pattern provides this strategy. Take we, for example, the Model-View-Controller, we would see that the View is not allowed to interact with the Model directly and should use the Controller as the intermediary.</p>
+
+<p>It seems to me that these strategies often come from the general idea that permissiveness is not good. This, in my opinion, leads to either over-engineered solutions or conversely to the systems with insufficient decoupling of the responsibilities.</p>
+
+<p>I tend to think that the system’s design requires a much more formal approach with clear metrics and motivation.</p>
+
+<p>We already saw that SoC, when applied to the functions and modules, always led to more reusable, testable and maintainable code. So why not take the cohesion and coupling as those metrics and apply the SoC at the application’s level?</p>
+
+<p>That’s how we get to segregating the modules into <a href="https://dzone.com/articles/layered-architecture-is-good">layers</a>. This is not a concrete architectural pattern, but rather a high-level specification for that strategy I was talking about.</p>
+
+<p>The modules get grouped in layers, the same way we’d form a module from the set of distinct functions.</p>
+
+<blockquote>
+  <p>The resulting set of modules within one layer has high cohesion based on the similar duties in the system and the same level of abstraction, while communication and environment awareness between the layers is very much restricted to achieve loose coupling.</p>
+</blockquote>
+
+<p>We’re not only constraining the communication - the layers with higher environment specifics at the bottom (Repositories, such as a database wrapper or a networking service) are forbidden to directly refer to anything defined in the higher layers (business logic or UI).</p>
+
+<p>So if we take just the networking service that talks to the backend, it should know <strong>nothing</strong> about the rest of the system and only provide the API for sending the requests.</p>
+
+<p>The business logic layer will be aware of and using that Repository, but it should have no idea if any UI is attached to the system.</p>
+
+<p>The UI layer is aware of the business logic modules and uses their APIs to read the up-to-date data and trigger actions, but at the same time, it knows nothing about the Repository, as the business logic hides the factual underlying infrastructure from it.</p>
+
+<blockquote>
+  <p>This way we can guarantee intrinsic testability of the whole system, where each layer either doesn’t even know the other exists or is decoupled to such a high degree that can easily be surrounded by mocks in tests.</p>
+</blockquote>
+
+<h2 id="repository">Repository</h2>
+
+<p>Although decoupling of the business logic and the UI is a standard move, I found it surprising that the majority of the popular patterns we have for iOS do not stress the importance of decoupling the business logic from the data gateways, such as a networking layer.</p>
+
+<p>So many times did I see the requests being sent right from the view controllers or other business logic modules. Same thing with the database queries, UserDefaults, and any other local or remote data storages.</p>
+
+<p>As you may guess, I don’t like the tight coupling here. But it’s not just coupling between the modules, which is more or less tolerable.</p>
+
+<p>We’re talking about a tight coupling between the inputs for the algorithm and the algorithm itself. Such code is nearly impossible to test or evolve.</p>
+
+<p>There are multiple reasons why you don’t want to embed direct read-write operations in your business logic, thus being unable to easily swap the real calls with mocked ones:</p>
+
+<ol>
+  <li>You may accidentally corrupt the valuable data as you run an unfinished algorithm</li>
+  <li>The access to the real data may be slow (large file sizes for local resources, slow network / test server when accessing remote resources)</li>
+  <li>The external data may not be available (local database is empty and needs to be pre-populated, the server is down or there is an Internet connection outage)</li>
+  <li>The backend may suddenly change the response format when you don’t expect it</li>
+</ol>
+
+<p>The latter case is notorious. Of course, in an ideal world, this should never happen, but it does, and more often than you may think. Even CI won’t save you.</p>
+
+<p>The app would stop working, and the first person to be blamed will be YOU, the mobile engineer. YOUR app broke. And YOU’ll have to offer excuses and look pathetic during the first minutes after the failure was uncovered.</p>
+
+<p>Imagine the CEO of your company is presenting the app on an important event for investors, and THIS happens.</p>
+
+<p>The ideal way out would be: the app does not crash, but instead, gracefully shows a user-friendly error message. We’re handing our boss another device with a build that runs in offline mode using mocked demo data, and the presentation continues, with the accident passed almost unnoticed.</p>
+
+<p>Offline demo mode? It sounds like a lot of work! But it’s not if you’ve decoupled and abstracted away from the data gateways.</p>
+
+<p>When we have a business logic module that queries the data from elsewhere, we need to extract the concern of accessing that external data resources to a separate module and hide the unnecessary query details behind a facade.</p>
+
+<p>This is how a Repository is formed.</p>
+
+<p>Let’s see an example. We have a ViewController that loads and displays a list of some items:</p>
+
+<div class="language-swift highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+</pre></td><td class="rouge-code"><pre><span class="kd">class</span> <span class="kt">ListViewController</span><span class="p">:</span> <span class="kt">UIViewController</span> <span class="p">{</span>
+    
+    <span class="k">var</span> <span class="nv">items</span><span class="p">:</span> <span class="p">[</span><span class="kt">Item</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">var</span> <span class="nv">tableView</span><span class="p">:</span> <span class="kt">UITableView</span><span class="p">?</span>
+    
+    <span class="k">override</span> <span class="kd">func</span> <span class="nf">viewDidLoad</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">let</span> <span class="nv">url</span> <span class="o">=</span> <span class="kt">URL</span><span class="p">(</span><span class="nv">string</span><span class="p">:</span> <span class="s">"https://api.service.com/list"</span><span class="p">)</span><span class="o">!</span>
+        <span class="k">let</span> <span class="nv">request</span> <span class="o">=</span> <span class="kt">URLRequest</span><span class="p">(</span><span class="nv">url</span><span class="p">:</span> <span class="n">url</span><span class="p">)</span>
+        <span class="kt">URLSession</span><span class="o">.</span><span class="n">shared</span><span class="o">.</span><span class="nf">dataTask</span><span class="p">(</span><span class="nv">with</span><span class="p">:</span> <span class="n">request</span><span class="p">)</span> <span class="p">{</span> <span class="p">[</span><span class="k">weak</span> <span class="k">self</span><span class="p">]</span> <span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">response</span><span class="p">,</span> <span class="n">error</span><span class="p">)</span> <span class="k">in</span>
+            <span class="k">if</span> <span class="k">let</span> <span class="nv">list</span> <span class="o">=</span> <span class="k">try</span><span class="p">?</span> <span class="kt">JSONDecoder</span><span class="p">()</span><span class="o">.</span><span class="nf">decode</span><span class="p">([</span><span class="kt">Item</span><span class="p">]</span><span class="o">.</span><span class="k">self</span><span class="p">,</span> <span class="nv">from</span><span class="p">:</span> <span class="n">data</span> <span class="p">??</span> <span class="kt">Data</span><span class="p">())</span> <span class="p">{</span>
+                <span class="k">self</span><span class="p">?</span><span class="o">.</span><span class="n">items</span> <span class="o">=</span> <span class="n">list</span>
+                <span class="k">self</span><span class="p">?</span><span class="o">.</span><span class="n">tableView</span><span class="p">?</span><span class="o">.</span><span class="nf">reloadData</span><span class="p">()</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+<p>The first thing to do is to introduce the <code class="language-plaintext highlighter-rouge">ListRepository</code> protocol and refactor the ViewController to use it:</p>
+
+<div class="language-swift highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre></td><td class="rouge-code"><pre><span class="kd">protocol</span> <span class="kt">ListRepository</span> <span class="p">{</span>
+    <span class="kd">func</span> <span class="nf">loadList</span><span class="p">(</span><span class="nv">completion</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">([</span><span class="kt">Item</span><span class="p">],</span> <span class="kt">Error</span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span>
+<span class="p">}</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<div class="language-swift highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+</pre></td><td class="rouge-code"><pre><span class="kd">class</span> <span class="kt">ListViewController</span><span class="p">:</span> <span class="kt">UIViewController</span> <span class="p">{</span>
+    
+    <span class="k">var</span> <span class="nv">items</span><span class="p">:</span> <span class="p">[</span><span class="kt">Item</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">var</span> <span class="nv">tableView</span><span class="p">:</span> <span class="kt">UITableView</span><span class="p">?</span>
+    <span class="k">var</span> <span class="nv">repository</span><span class="p">:</span> <span class="kt">ListRepository</span>
+    
+    <span class="k">override</span> <span class="kd">func</span> <span class="nf">viewDidLoad</span><span class="p">()</span> <span class="p">{</span>
+        <span class="n">repository</span><span class="o">.</span><span class="n">loadList</span> <span class="p">{</span> <span class="p">[</span><span class="k">weak</span> <span class="k">self</span><span class="p">]</span> <span class="p">(</span><span class="n">list</span><span class="p">,</span> <span class="n">error</span><span class="p">)</span> <span class="k">in</span>
+            <span class="k">self</span><span class="p">?</span><span class="o">.</span><span class="n">items</span> <span class="o">=</span> <span class="n">list</span>
+            <span class="k">self</span><span class="p">?</span><span class="o">.</span><span class="n">tableView</span><span class="p">?</span><span class="o">.</span><span class="nf">reloadData</span><span class="p">()</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>And now we have the freedom to substitute the implementation that actually works with the backend:</p>
+
+<div class="language-swift highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+</pre></td><td class="rouge-code"><pre><span class="kd">struct</span> <span class="kt">RealListRepository</span><span class="p">:</span> <span class="kt">ListRepository</span> <span class="p">{</span>
+    <span class="kd">func</span> <span class="nf">loadList</span><span class="p">(</span><span class="nv">completion</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">([</span><span class="kt">Item</span><span class="p">],</span> <span class="kt">Error</span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span> <span class="p">{</span>
+        <span class="c1">// networking code</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>or a dummy repository that serves the demo data even in offline mode:</p>
+
+<div class="language-swift highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+</pre></td><td class="rouge-code"><pre><span class="kd">struct</span> <span class="kt">DummyListRepository</span><span class="p">:</span> <span class="kt">ListRepository</span> <span class="p">{</span>
+    <span class="kd">func</span> <span class="nf">loadList</span><span class="p">(</span><span class="nv">completion</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">([</span><span class="kt">Item</span><span class="p">],</span> <span class="kt">Error</span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kt">DispatchQueue</span><span class="o">.</span><span class="n">main</span><span class="o">.</span><span class="n">async</span> <span class="p">{</span>
+            <span class="k">let</span> <span class="nv">list</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="kt">Item</span><span class="p">(</span><span class="nv">id</span><span class="p">:</span> <span class="s">"1"</span><span class="p">,</span> <span class="nv">name</span><span class="p">:</span> <span class="s">"First item"</span><span class="p">),</span>
+                <span class="kt">Item</span><span class="p">(</span><span class="nv">id</span><span class="p">:</span> <span class="s">"2"</span><span class="p">,</span> <span class="nv">name</span><span class="p">:</span> <span class="s">"Second item"</span><span class="p">)</span>
+            <span class="p">]</span>
+            <span class="nf">completion</span><span class="p">(</span><span class="n">list</span><span class="p">,</span> <span class="kc">nil</span><span class="p">)</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>With this setup, the app can be configured to work with either real networking API or with a mocked data, which we also can save in bundled resources instead of hardcoding.</p>
+
+<p>For the above example I should also note that when we’re implementing a stub for an asynchronous API call, we should always maintain it’s asynchronicity (trigger the callback from inside <code class="language-plaintext highlighter-rouge">DispatchQueue.main.async</code>). Otherwise, we’ll be <a href="https://blog.izs.me/2013/08/designing-apis-for-asynchrony/">releasing Zalgo</a>.</p>
+
+<p>You can see the Repository taking an intrinsic part in the <a href="https://nalexn.github.io/clean-architecture-swiftui/">Clean Architecture variant</a> I proposed for the SwiftUI apps.</p>
+
+<h2 id="conclusion">Conclusion</h2>
+
+<p>Separation of Concerns is that giant on whose shoulders stands many buzzword patterns we know today. Just that principle alone provides the required guidance for dramatic improvement of the software quality at all levels.</p>
+
+<p>Don’t overlook it when writing the code or designing the architecture. Loose coupling and high cohesion are your friends!</p>
+
+<p>Separate the algorithms from the inputs and outputs for better testability, and your software will be rock-solid even without SOLID :)</p>
+
+      <h2>Your appreciation is my inspiration!</h2>
+      <p>I have tons of unpublished kick-ass materials and ideas, but I need your help! Consider sharing this article on <a href="https://twitter.com/share?url=http://nalexn.github.io/separation-of-concerns/?utm_source=share_tw&amp;text=Separation of Concerns in Software Design&amp;hashtags=iosdev&amp;via=nallexn" title="Twitter" target="_blank" onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=500');return false;"><i class="fa fa-twitter share-button"></i></a>, <a href="https://www.facebook.com/sharer/sharer.php?u=http://nalexn.github.io/separation-of-concerns/?utm_source=share_fb&amp;display=popup&amp;quote=Separation of Concerns in Software Design&amp;hashtag=#iosdev" title="Facebook" target="_blank" onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=500');return false;"><i class="fa fa-facebook-f share-button"></i></a> or <a href="https://www.linkedin.com/sharing/share-offsite/?url=http://nalexn.github.io/separation-of-concerns/?utm_source=share_in" title="LinkedIn" target="_blank" onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=500');return false;"><i class="fa fa-linkedin share-button"></i></a>. This tiny action helps to grow this blog and inspires me to post more! (Or if you are nuts, <a href="https://venmo.com/nallexn" target="_blank">Venmo</a> me a drink!)</p>
+      </p>
+      <p>You can subscribe to <a href="http://nalexn.github.io/feed.xml" target="_blank">RSS feed</a> or follow my <a href="https://twitter.com/nallexn" target="_blank">Twitter</a> for the new articles alerts.
+
+      <div style="width:0px; height:30px; display: block;"></div>
+      <h2>Most recent articles</h2>
+      <div class="content-box recent clearfix" style="padding: 20px 10px;">
+        
+        
+          
+        
+          
+          <article class="post">
+            
+              <a class="post-thumbnail" style="background-image: url(/assets/img/observable_001.jpg)" href="/swiftui-observableobject/"></a>
+            
+            <div class="post-content">
+              <h2 class="post-title"><a href="/swiftui-observableobject/">Why I quit using the ObservableObject</a></h2>
+              <p></p>
+              <span class="post-date">2019, Dec 20&nbsp;&nbsp;&nbsp;—&nbsp;</span>
+              <span class="post-words">12 minute read</span>
+            </div>
+          </article>
+          
+        
+          
+          <article class="post">
+            
+              <a class="post-thumbnail" style="background-image: url(/assets/img/comparison_01.jpg)" href="/anyview-vs-group/"></a>
+            
+            <div class="post-content">
+              <h2 class="post-title"><a href="/anyview-vs-group/">Performance Battle: AnyView vs Group</a></h2>
+              <p></p>
+              <span class="post-date">2019, Dec 05&nbsp;&nbsp;&nbsp;—&nbsp;</span>
+              <span class="post-words">12 minute read</span>
+            </div>
+          </article>
+          
+        
+          
+          <article class="post">
+            
+              <a class="post-thumbnail" style="background-image: url(/assets/img/swiftui_unit_testing_01.jpg)" href="/swiftui-unit-testing/"></a>
+            
+            <div class="post-content">
+              <h2 class="post-title"><a href="/swiftui-unit-testing/">Who said we cannot unit test SwiftUI views?</a></h2>
+              <p></p>
+              <span class="post-date">2019, Nov 21&nbsp;&nbsp;&nbsp;—&nbsp;</span>
+              <span class="post-words">18 minute read</span>
+            </div>
+          </article>
+          
+        
+          
+          <article class="post">
+            
+              <a class="post-thumbnail" style="background-image: url(/assets/img/deep_link_swiftui_01.jpg)" href="/swiftui-deep-linking/"></a>
+            
+            <div class="post-content">
+              <h2 class="post-title"><a href="/swiftui-deep-linking/">Programmatic navigation in SwiftUI project</a></h2>
+              <p></p>
+              <span class="post-date">2019, Nov 08&nbsp;&nbsp;&nbsp;—&nbsp;</span>
+              <span class="post-words">11 minute read</span>
+            </div>
+          </article>
+          
+        
+        <article class="post">
+          <a class="post-thumbnail" style="background-image: url(/assets/img/launch_001.jpg)" href="/"></a>
+          <div class="post-content">
+            <h2 class="post-title"><a href="/">Browse All Articles</a></h2>
+            <p></p>
+            <span class="post-date">Top iOS programming stuff, no kidding!</span>
+          </div>
+        </article>
+      </div>
+    </div> <!-- End Wrap Content -->
+  </div> <!-- End Page Content -->
+</article> <!-- End Article Page -->
+
+</div>
+
+  </div>
+</body>
+</html>

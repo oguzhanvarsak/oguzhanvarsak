@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-96224610-1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'UA-96224610-1');
+  </script>
+	<meta charset="utf-8">
+	<title>Callbacks, Part 3: Promise, Event, and Stream (Functional Reactive Programming) - Alexey Naumov</title>
+
+  <!-- Edit site and author settings in `_config.yml` to make the social details your own -->
+
+    <meta content="Alexey Naumov" property="og:site_name">
+  
+    <meta content="Callbacks, Part 3: Promise, Event, and Stream (Functional Reactive Programming)" property="og:title">
+  
+  
+    <meta content="article" property="og:type">
+  
+  
+    <meta content="Comparison of callback techniques in iOS, pros & cons" property="og:description">
+  
+  
+    <meta content="http://nalexn.github.io/callbacks-part-3-promise-event-stream/" property="og:url">
+  
+  
+    <meta content="2018-04-12T18:30:00+03:00" property="article:published_time">
+    <meta content="http://nalexn.github.io/about/" property="article:author">
+  
+  
+    <meta content="http://nalexn.github.io/assets/img/tools_002.jpg" property="og:image">
+  
+  
+    
+  
+  
+    <meta name="keywords" content="promise, frp, functional, reactive, programming, ios, development">
+    
+    <meta content="promise" property="article:tag">
+    
+    <meta content="frp" property="article:tag">
+    
+    <meta content="functional" property="article:tag">
+    
+    <meta content="reactive" property="article:tag">
+    
+    <meta content="programming" property="article:tag">
+    
+    <meta content="ios" property="article:tag">
+    
+    <meta content="development" property="article:tag">
+    
+  
+
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:site" content="@">
+    <meta name="twitter:creator" content="@nallexn">
+  
+    <meta name="twitter:title" content="Callbacks, Part 3: Promise, Event, and Stream (Functional Reactive Programming)">
+  
+  
+    <meta name="twitter:url" content="http://nalexn.github.io/callbacks-part-3-promise-event-stream/">
+  
+  
+    <meta name="twitter:description" content="Comparison of callback techniques in iOS, pros & cons">
+  
+
+	<meta name="description" content="Comparison of callback techniques in iOS, pros & cons">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+	<meta property="og:image" content="">
+  <link rel="icon" sizes="16x16" href="/assets/img/favicon/favicon.ico">
+  <link rel="icon" sizes="32x32" href="/assets/img/favicon/favicon-32.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="/assets/img/favicon/favicon-114.png">
+	<!-- Chrome, Firefox OS and Opera -->
+	<meta name="theme-color" content="#263959">
+	<!-- Windows Phone -->
+	<meta name="msapplication-navbutton-color" content="#263959">
+	<!-- iOS Safari -->
+	<meta name="apple-mobile-web-app-status-bar-style" content="#263959">
+	<!-- Google Fonts -->
+	<link href="https://fonts.googleapis.com/css?family=PT+Serif:400,700" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css?family=Lato:300,400,700" rel="stylesheet">
+	<!-- Font Awesome -->
+	<link rel="stylesheet" href="/assets/fonts/font-awesome/css/font-awesome.min.css">
+	<!-- Styles -->
+	<link rel="stylesheet" href="/assets/css/main.css?v=2">
+</head>
+
+<body>
+  <div class="wrapper">
+    <aside class="sidebar">
+  <header>
+    <div class="about">
+      <div class="author-logo">
+      <span class="hover-message">Let's connect on LinkedIn!</span>
+      <div class="cover-author-image">
+        <a href="https://in.linkedin.com/in/nalexn" target="_blank"><img src="/assets/img/profile-image.jpg" alt="Alexey Naumov"></a>
+      </div>
+      </div>
+      <div class="author-name">Alexey Naumov</div>
+      <a href="/"><img src="/assets/img/content_00.png" alt="" style="-webkit-border-radius: 0%; border-radius: 0%;"></a>
+    </div>
+  </header> <!-- End Header -->
+  <footer>
+    <section class="contact">
+      <h3 class="contact-title">Links</h3>
+      <ul>
+        <li><a href="https://twitter.com/nallexn" target="_blank"><i class="fa fa-twitter" aria-hidden="true"></i></a></li>
+        <li><a href="https://in.linkedin.com/in/nalexn" target="_blank"><i class="fa fa-linkedin"></i></a></li>
+        <li><a href="https://github.com/nalexn" target="_blank"><i class="fa fa-github"></i></a></li>
+        <li><a href="https://stackoverflow.com/users/2923345?tab=profile" target="_blank"><i class="fa fa-stack-overflow" aria-hidden="true"></i></a></li>
+        <li><a href="http://nalexn.github.io/feed.xml" target="_blank"><i class="fa fa-rss"></i></a></li>
+      </ul>
+    </section> <!-- End Section Contact -->
+    <div class="copyright">
+      <p>2020 &copy; Alexey Naumov</p>
+    </div>
+  </footer> <!-- End Footer -->
+</aside> <!-- End Sidebar -->
+<div class="content-box clearfix">
+  <article class="article-page">
+  <div class="page-content">
+    <div class="wrap-content">
+      <header class="header-page">
+        <h1 class="page-title">Callbacks, Part 3: Promise, Event, and Stream (Functional Reactive Programming)</h1>
+        <div class="page-date"><span>2018, Apr 12&nbsp;&nbsp;&nbsp;&nbsp;</span></div>
+      </header>
+      <div class="page-image"><img class="page-image" src=/assets/img/tools_002.jpg alt="Callbacks, Part 3: Promise, Event, and Stream (Functional Reactive Programming)"></div>
+      <p>This article continues the series of posts about callback techniques in <a href="https://en.wikipedia.org/wiki/Cocoa_(API)">Cocoa</a>, their comparison &amp; benchmarking. This one is about <code class="language-plaintext highlighter-rouge">Promise</code>, <code class="language-plaintext highlighter-rouge">Event</code>, and <code class="language-plaintext highlighter-rouge">Stream</code>, their pros &amp; cons. Happy reading!</p>
+
+<p><a href="/callbacks-part-1-delegation-notificationcenter-kvo/">Callbacks, Part 1: Delegation, NotificationCenter, and KVO</a></p>
+
+<p><a href="/callbacks-part-2-closure-target-action-responder-chain/">Callbacks, Part 2: Closure, Target-Action, and Responder Chain</a></p>
+
+<hr />
+
+<h1 id="intro">Intro</h1>
+
+<p>What’s the most challenging problem for you when writing an async code? For me, it’s to keep the async code as readable as the sync code is (considering your sync core is readable 😜). Unfortunately, neither Swift nor Objective-C have the support of the <a href="https://msdn.microsoft.com/ru-ru/library/mt674882.aspx">async-await syntax</a> like C# has, so we have to deal with the routine of the Closure callbacks, which is truly the best tool among standard solutions we have in our disposal.</p>
+
+<p>As discussed in the <a href="/callbacks-part-2-closure-target-action-responder-chain/#Closure_disadvantages">previous post</a>, when we use Closures as callbacks the code can quickly become hardly readable, because the only way we can chain callbacks is to nest one into another, forming the <a href="https://en.wikipedia.org/wiki/Pyramid_of_doom_(programming)">pyramid of doom</a>.</p>
+
+<p>In fact, this construction of a few callbacks nested in each other can cause even more inconvenience:</p>
+
+<ul>
+  <li><em>Tedious error handling</em>: for each callback, we have to check for error and manually route the execution flow to either next callback in case there was no error, or to error handling code otherwise. A lot of boilerplate code.</li>
+  <li><em>No support for cancellation</em>: again, you have to write it on your own, store somewhere the state and check the state of the operation in each callback. More code to write!</li>
+  <li><em>Hard to manage parallel tasks</em>: you have two operations working in parallel which in the end need to launch another operation awaiting the first two. With traditional callbacks, you’d need to share the state between the callbacks and cross-check the state in callbacks. A lot of ugly and error-prone code.</li>
+</ul>
+
+<p>So, after using standard callback techniques through the length and breadth I came to a conclusion that their drawbacks are so significant that I needed to look for better tools, and these are <a href="#Promise"><em>Promise</em></a>, <a href="#Event"><em>Event</em></a> and <a href="#Stream"><em>Stream</em></a>.</p>
+
+<h1 id="promise"><a name="Promise"><a href="#Promise">Promise</a></a></h1>
+
+<p>Although <a href="https://en.wikipedia.org/wiki/Futures_and_promises">the concept</a> of <em>Promises</em> (aka <em>Futures</em>) is ancient as dinosaurs, it has been rediscovered by the JS community not so long ago and then rumors reached Cocoa developers as well.</p>
+
+<p>Promises mitigate all the aforementioned problems: they have straightforward error handling, they support cancellation, can organize parallel tasks and make the code to look more sync-like.</p>
+
+<p>So, how do Promises work?</p>
+
+<p>Just like a <a href="https://developer.apple.com/reference/foundation/blockoperation">BlockOperation</a>, Promises use <code class="language-plaintext highlighter-rouge">Closures</code> for encapsulation of the client code, which is triggered at an appropriate time.</p>
+
+<p>When we need to chain a few async tasks to perform one after the other, instead of nesting callbacks, Promises allow us to put the callbacks’ code in a natural order one block after the other, forming a <em>chain</em> rather than a <em>pyramid</em>.</p>
+
+<p>This makes the code much easier to read and maintain.</p>
+
+<p>Consider an example: <em>we need to send two subsequent network requests: at first load a <code class="language-plaintext highlighter-rouge">user</code> and then using its <code class="language-plaintext highlighter-rouge">id</code> send another request for user’s <code class="language-plaintext highlighter-rouge">posts</code>. While requests are working, we need to display a “Loading…” message and hide it when both requests finish or when either fail with an error. In the error’s case, we should display it’s description.</em></p>
+
+<p>A lot of business logic, huh? But see how gracefully this can be coded with Promises:</p>
+
+<div class="language-swift highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+</pre></td><td class="rouge-code"><pre><span class="n">firstly</span> <span class="p">{</span>
+    <span class="c1">// Triggering the loading indication and making the first API call</span>
+    <span class="nf">showLoadingIndicator</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">urlSession</span><span class="o">.</span><span class="nf">get</span><span class="p">(</span><span class="s">"/user"</span><span class="p">)</span>
+<span class="p">}</span><span class="o">.</span><span class="n">then</span> <span class="p">{</span> <span class="n">user</span> <span class="k">in</span>
+    <span class="c1">// Notice that we use 'user.id', which was just loaded</span>
+    <span class="k">return</span> <span class="n">urlSession</span><span class="o">.</span><span class="nf">get</span><span class="p">(</span><span class="s">"/user/</span><span class="se">\(</span><span class="n">user</span><span class="o">.</span><span class="n">id</span><span class="se">)</span><span class="s">/posts"</span><span class="p">)</span>
+<span class="p">}</span><span class="o">.</span><span class="n">always</span> <span class="p">{</span>
+    <span class="c1">// The 'always' promise performs even if either of prior network requests failed</span>
+    <span class="nf">hideLoadingIndicator</span><span class="p">()</span>
+<span class="p">}</span><span class="o">.</span><span class="n">then</span> <span class="p">{</span> <span class="n">posts</span> <span class="k">in</span>
+    <span class="c1">// The 'then' promise only performs if all the preceding promises succeeded</span>
+    <span class="c1">// So here we can use "posts" loaded from the second request</span>
+    <span class="nf">display</span><span class="p">(</span><span class="nv">posts</span><span class="p">:</span> <span class="n">posts</span><span class="p">)</span>
+<span class="p">}</span><span class="o">.</span><span class="k">catch</span> <span class="p">{</span> <span class="n">error</span> <span class="k">in</span>
+    <span class="c1">// Error handling in one place</span>
+    <span class="nf">showErrorMessage</span><span class="p">(</span><span class="n">error</span><span class="p">)</span>
+<span class="p">}</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>As you can see, there are a few chained async operations written in a natural order of how they are performed. The code is more declarative and explanatory than with nested Closure callbacks.</p>
+
+<p>Pure <code class="language-plaintext highlighter-rouge">Cocoa</code> doesn’t provide us with a native citizen for Promises, so the code above uses <a href="http://promisekit.org/">PromiseKit</a> library, but there are also <a href="https://github.com/Thomvis/BrightFutures">BrightFutures</a> and <a href="https://github.com/BoltsFramework/Bolts-ObjC">Bolts</a>, you can choose your favorite.</p>
+
+<h2 id="advantages-of-using-promises"><a name="Promise_advantages"><a href="#Promise_advantages">Advantages of using Promises</a></a></h2>
+<ul>
+  <li>Great alternative to traditional Closure callbacks, addresses many of their problems:
+    <ul>
+      <li>Chaining async callbacks rather then nesting them improves the readability of the code.</li>
+      <li>Straightforward error handling, all errors are captured and forwarded for handling in one place.</li>
+      <li>Ability to recover from errors and continue the original flow.</li>
+      <li>Cancellation support (PromiseKit and Bolts).</li>
+      <li>Awaiting of multiple promises before the chain continues can be coded without significant efforts.</li>
+    </ul>
+  </li>
+  <li>Automatically catches all the <em>exceptions</em> thrown by the client code and pacify them to simple <code class="language-plaintext highlighter-rouge">Errors</code>, which are handled just like other regular errors. This is an additional safety barrier for you if you work with something <em>explosive</em>, for example parsing a volatile JSON from some unstable web API.</li>
+  <li>Promises are designed to be executed only <em>once</em> and then self-destruct. In certain situations, this is a very helpful feature, since this adds clarity to the code where it’s important to guarantee the callback cannot be called the second time.</li>
+  <li>Because promises self-destruct after execution, it’s harder to leak memory referencing <code class="language-plaintext highlighter-rouge">self</code> or another object from inside a Closure.</li>
+</ul>
+
+<h2 id="disadvantages-of-using-promises"><a name="Promise_disadvantages"><a href="#Promise_disadvantages">Disadvantages of using Promises</a></a></h2>
+<ul>
+  <li>Until you master your skills of using the Promises, every now and then the compiler would complain it cannot understand the code you just wrote with the promises. And don’t expect to see any meaningful explanation from the Swift compiler. So you have to be prepared to spend some time getting used to the syntax. This is definitely harder to use for newbies who are still not confident with Closures.</li>
+  <li>As mentioned in the advantages, promises are resolved once and then dismissed. This also implies you <a href="http://promisekit.org/docs/cookbook/wrapping-delegation/">cannot easily use</a> Promises as an alternative to callbacks intended to be called <em>multiple</em> times, such as with <em>delegate</em> or <em>NotificationCenter</em>.</li>
+  <li>The cancellation isn’t that tasteful as the error handling. Depending on realization, you’d have to check the cancellation status in each promise (Bolts) or handle a special type of <code class="language-plaintext highlighter-rouge">Error</code> in the error handling code (PromiseKit).</li>
+  <li>The syntax still isn’t that great as it could be with <a href="https://gist.github.com/lattner/31ed37682ef1576b16bca1432ea9f782#part-1-asyncawait-beautiful-asynchronous-apis">async-await</a>, which is still not supported as of Swift version 5.0. 😒</li>
+  <li>Promises are <strong>100 times</strong> slower than any other callback technique (<a href="https://github.com/nalexn/PerformanceTestTools">I’ve done benchmarking</a>). This is because each consequent promise in the chain has to be scheduled through <code class="language-plaintext highlighter-rouge">dispatch_async</code> and performed <em>asynchronously</em>, which is a necessary evil: otherwise, promises can unintentionally cause <a href="https://en.wikipedia.org/wiki/Deadlock">deadlocks</a>. This problem has its own name - <a href="http://blog.izs.me/post/59142742143/designing-apis-for-asynchrony">“releasing Zalgo”</a>. So it’s ok to use Promises for the networking layer, where the performance drop won’t be noticed, but I would think twice before using Promises elsewhere in the app.</li>
+  <li>Debugging the promises is a pain. As you learned from the previous point, each consequent promise in the chain is <em>always</em> performed asynchronously. That means our favorite step-over debugging is simply not possible, you have to put breakpoints all over the place to be able to follow the execution flow.</li>
+  <li>Any crash reporting tool, such as <a href="https://try.crashlytics.com/">Crashlytics</a>, are almost useless with Promises because when a code scheduled through <code class="language-plaintext highlighter-rouge">dispatch_async</code> crashes, your printed call stack trace is almost empty. You’d expect to see the full promise chain in the stack, but instead, there will be only the last promise that crashed, leaving you with no clue on where the source of the problem was.</li>
+</ul>
+
+<h1 id="event"><a name="Event"><a href="#Event">Event</a></a></h1>
+
+<p>If <em>Promises</em> can be used as a replacement for Closure callbacks, <em>Events</em> are a great altrnative to standard <em>delegation</em>, <em>target-action</em> and <em>NotificationCenter</em> discussed in <a href="/callbacks-part-1-delegation-notificationcenter-kvo/">two</a> <a href="/callbacks-part-2-closure-target-action-responder-chain/">previous</a> posts.</p>
+
+<p>Isn’t it cool that those three different APIs each having many drawbacks can be thrown away and replaced with one, very simple yet functional API? <em>Event</em> is a truly great alternative when you realize the problem of using the standard tools, but not yet willing to use <em>Streams</em> from <em>Functional Reactive Programming</em>.</p>
+
+<p>The concept of Event can be found in C#, where it has <a href="https://msdn.microsoft.com/en-us/library/awbftdfh.aspx">support on the language level</a>, but in Cocoa, we have to add a third-party library for <em>Event</em>. This can be <a href="https://github.com/artman/Signals">Signals</a>, or <a href="https://github.com/aleclarson/emitter-kit">EmitterKit</a>.</p>
+
+<p>What’s really charming about Events is the simplicity of implementation - Event libraries are usually just about couple hundred lines of code, as opposed to Promise or FRP frameworks, where the size varies from <a href="https://github.com/mxcl/PromiseKit">5,000</a> to <a href="https://github.com/ReactiveX/RxSwift">55,000</a> lines of code.</p>
+
+<p>Events provide a generic mechanism for sending notifications to one or many recipients. The notification can carry any set of parameters of any types (thanks to Generics) and are delivered to subscription Closures.</p>
+
+<p>Take a look at the example:</p>
+
+<div class="language-swift highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+</pre></td><td class="rouge-code"><pre><span class="kd">class</span> <span class="kt">DataProvider</span> <span class="p">{</span>
+
+    <span class="c1">// These public variables are points for subscription</span>
+    <span class="k">let</span> <span class="nv">dataSignal</span> <span class="o">=</span> <span class="kt">Signal</span><span class="o">&lt;</span><span class="p">(</span><span class="nv">data</span><span class="p">:</span> <span class="kt">Data</span><span class="p">,</span> <span class="nv">error</span><span class="p">:</span> <span class="kt">Error</span><span class="p">)</span><span class="o">&gt;</span><span class="p">()</span>
+    <span class="k">let</span> <span class="nv">progressSignal</span> <span class="o">=</span> <span class="kt">Signal</span><span class="o">&lt;</span><span class="kt">Float</span><span class="o">&gt;</span><span class="p">()</span>
+
+    <span class="o">...</span>
+
+    <span class="kd">func</span> <span class="nf">handle</span><span class="p">(</span><span class="nv">receivedData</span><span class="p">:</span> <span class="kt">Data</span><span class="p">,</span> <span class="nv">error</span><span class="p">:</span> <span class="kt">Error</span><span class="p">)</span> <span class="p">{</span>
+        <span class="c1">// Whenever we want to notify subscribers we trigger the signal with the payload data to deliver</span>
+        <span class="n">progressSignal</span><span class="o">.</span><span class="nf">fire</span><span class="p">(</span><span class="mf">1.0</span><span class="p">)</span>
+        <span class="n">dataSignal</span><span class="o">.</span><span class="nf">fire</span><span class="p">(</span><span class="nv">data</span><span class="p">:</span><span class="n">receivedData</span><span class="p">,</span> <span class="nv">error</span><span class="p">:</span><span class="n">error</span><span class="p">)</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+<p>As you can guess from the code above, the <code class="language-plaintext highlighter-rouge">DataProvider</code> is going to be the source of notifications. Now see how the other modules can subscribe for and handle the notifications:</p>
+
+<div class="language-swift highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+</pre></td><td class="rouge-code"><pre><span class="kd">class</span> <span class="kt">DataConsumer</span> <span class="p">{</span>
+
+    <span class="nf">init</span><span class="p">(</span><span class="nv">dataProvider</span><span class="p">:</span> <span class="kt">DataProvider</span><span class="p">)</span> <span class="p">{</span>
+        <span class="c1">// 'progress' updates will be sampled to us every 0.5 second</span>
+        <span class="n">dataProvider</span><span class="o">.</span><span class="n">progressSignal</span><span class="o">.</span><span class="nf">subscribe</span><span class="p">(</span><span class="nv">on</span><span class="p">:</span> <span class="k">self</span><span class="p">)</span> <span class="p">{</span> <span class="n">progress</span> <span class="k">in</span>
+            <span class="c1">// handle progress</span>
+        <span class="p">}</span><span class="o">.</span><span class="nf">sample</span><span class="p">(</span><span class="nv">every</span><span class="p">:</span> <span class="mf">0.5</span><span class="p">)</span>
+        <span class="c1">// one time subscription for tuple (data, error)</span>
+        <span class="n">dataProvider</span><span class="o">.</span><span class="n">dataSignal</span><span class="o">.</span><span class="nf">subscribeOnce</span><span class="p">(</span><span class="nv">on</span><span class="p">:</span> <span class="k">self</span><span class="p">)</span> <span class="p">{</span> <span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">error</span><span class="p">)</span> <span class="k">in</span>
+            <span class="c1">// handle data or error</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<h2 id="advantages-of-using-events"><a name="Event_advantages"><a href="#Event_advantages">Advantages of using Events</a></a></h2>
+<ul>
+  <li>Supports multiple recipients.</li>
+  <li>Has ability to transmit any set of data with a safe static type checking. This includes a <code class="language-plaintext highlighter-rouge">Void</code> event for no data in the notification.</li>
+  <li>Automatic cancellation of the subscription for deallocated subscribers (depends on the library).</li>
+  <li>Very lean infrastructure:
+    <ul>
+      <li>We describe all the information about the notification (name + data type) and simultaneously create the subscription point with one line of code</li>
+      <li>The subscription point is at the same time the delivery hub: sending a notification is again just one line of code</li>
+    </ul>
+  </li>
+  <li>Low coupling: both the subscription point and the transmitted data format are declared in one place with lowest possible <a href="https://en.wikipedia.org/wiki/Connascence_(computer_programming)#Static_Connascences">connascence of name</a>.</li>
+  <li>The lightweight of the libraries. <a href="https://blog.codinghorror.com/the-best-code-is-no-code-at-all/">Less code – fewer bugs</a>.</li>
+  <li>Because of inner simplicity of the notification delivery code, we have
+    <ul>
+      <li>Meaningful call stacks if the client code crashes</li>
+      <li>Easier debugging than with Promises or Streams</li>
+    </ul>
+  </li>
+  <li>Trivial API that’s really easy to understand and start using to full extent than Promises or Streams</li>
+  <li>Library specific features, such as:
+    <ul>
+      <li>one-time subscription</li>
+      <li>delayed notifications</li>
+      <li>filtering and time sampling of notifications</li>
+      <li>delivery of notifications to specific <code class="language-plaintext highlighter-rouge">OperationQueue</code></li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="disadvantages-of-using-events"><a name="Event_disadvantages"><a href="#Event_disadvantages">Disadvantages of using Events</a></a></h2>
+<ul>
+  <li>Two or more Events cannot be naturally combined in any manner. Any business logic depending on multiple Events has to be coded separately. (In the meanwhile Promises and Streams are combinable by design).</li>
+  <li>Events can only be used for transmitting the data in one direction. We cannot pull data with them, as we could with <a href="/callbacks-part-1-delegation-notificationcenter-kvo/#delegate_advantages">delegation</a> or <a href="/callbacks-part-2-closure-target-action-responder-chain/#Closure_advantages">Closure</a>.</li>
+  <li>Just as with any other tool utilizing Closures for client code encapsulation, you should beware retain cycles. Be sure to use constructions like <code class="language-plaintext highlighter-rouge">[weak self]</code>.</li>
+</ul>
+
+<h1 id="stream"><a name="Stream"><a href="#Stream">Stream</a></a></h1>
+
+<p>“Asynchronous data stream” or just <em>Stream</em> - is the main concept behind <em>Functional Reactive Programming</em> frameworks, such as <a href="https://github.com/ReactiveCocoa/ReactiveSwift">ReactiveSwift</a> or <a href="https://github.com/ReactiveX/RxSwift">RxSwift</a>. FRP is a fairly big topic, so I’ll give a short reference here and focus on its Pros and Cons, while you can read a more detailed introduction <a href="https://gist.github.com/staltz/868e7e9bc2a7b8c1f754">somewhere else</a>.</p>
+
+<p>We just talked about <em>Event</em>, so in this case, the <em>Stream</em> is the “Event on steroids”:</p>
+
+<ul>
+  <li>It remembers all the values that have been sent through during its lifetime</li>
+  <li>It can be combined with other streams in <a href="http://rxmarbles.com/">many fancy ways</a></li>
+  <li>It has significant incline towards writing functional-style code</li>
+  <li>It has deep integration with Cocoa classes (via supplementary frameworks¹)</li>
+  <li>It has more generic use cases than just <em>observation</em></li>
+</ul>
+
+<p>¹ When combined with <a href="https://github.com/ReactiveCocoa/ReactiveCocoa">ReactiveCocoa</a> or <a href="https://github.com/ReactiveX/RxSwift/tree/master/RxCocoa">RxCocoa</a>, Streams form a fully-fledged toolkit that replaces many things we got used to in Cocoa, including previously discussed delegation, target-action, and other techniques. More than that, most of the code boilerplate we had in our apps, such as when working with <code class="language-plaintext highlighter-rouge">UITableView</code>, now can be replaced with literally one-line-of-code UI bindings and data streams manipulated by functional operators.</p>
+
+<p>Although the functional code is preferred and highly encouraged by those libraries, the developer can choose to which extent he wants to dive into the functional programming world - at a bare minimum we can use <em>Streams</em> just like <em>Events</em> - for notification delivery, writing the callback closure in imperative style.</p>
+
+<p>Below is an example from <a href="https://github.com/ReactiveCocoa/ReactiveSwift">ReactiveSwift</a>, which demonstrates how compact could be the code that sends search requests as the user enters the text, keeping only the latest request alive:</p>
+
+<div class="language-swift highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+</pre></td><td class="rouge-code"><pre><span class="k">let</span> <span class="nv">searchResults</span> <span class="o">=</span> <span class="n">searchStrings</span>
+    <span class="o">.</span><span class="nf">flatMap</span><span class="p">(</span><span class="o">.</span><span class="n">latest</span><span class="p">)</span> <span class="p">{</span> <span class="p">(</span><span class="nv">query</span><span class="p">:</span> <span class="kt">String</span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt">SignalProducer</span><span class="o">&lt;</span><span class="p">(</span><span class="kt">Data</span><span class="p">,</span> <span class="kt">URLResponse</span><span class="p">),</span> <span class="kt">AnyError</span><span class="o">&gt;</span> <span class="k">in</span>
+        <span class="k">let</span> <span class="nv">request</span> <span class="o">=</span> <span class="k">self</span><span class="o">.</span><span class="nf">makeSearchRequest</span><span class="p">(</span><span class="nv">escapedQuery</span><span class="p">:</span> <span class="n">query</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kt">URLSession</span><span class="o">.</span><span class="n">shared</span><span class="o">.</span><span class="n">reactive</span><span class="o">.</span><span class="nf">data</span><span class="p">(</span><span class="nv">with</span><span class="p">:</span> <span class="n">request</span><span class="p">)</span>
+    <span class="p">}</span>
+    <span class="o">.</span><span class="n">map</span> <span class="p">{</span> <span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">response</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">[</span><span class="kt">SearchResult</span><span class="p">]</span> <span class="k">in</span>
+        <span class="k">let</span> <span class="nv">string</span> <span class="o">=</span> <span class="kt">String</span><span class="p">(</span><span class="nv">data</span><span class="p">:</span> <span class="n">data</span><span class="p">,</span> <span class="nv">encoding</span><span class="p">:</span> <span class="o">.</span><span class="n">utf8</span><span class="p">)</span><span class="o">!</span>
+        <span class="k">return</span> <span class="k">self</span><span class="o">.</span><span class="nf">searchResults</span><span class="p">(</span><span class="nv">fromJSONString</span><span class="p">:</span> <span class="n">string</span><span class="p">)</span>
+    <span class="p">}</span>
+    <span class="o">.</span><span class="nf">observe</span><span class="p">(</span><span class="nv">on</span><span class="p">:</span> <span class="kt">UIScheduler</span><span class="p">())</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>If you never worked with FRP libraries, you might not know what <code class="language-plaintext highlighter-rouge">flatMap</code> does, or why you even need a <code class="language-plaintext highlighter-rouge">SignalProducer</code> here and not a <code class="language-plaintext highlighter-rouge">Signal</code>. For a developer joining the FRP world, this is the main challange - a lot of unknown functions, operators and even bizarre code formatting to get used to.</p>
+
+<p>From a developer’s standpoint, <em>Stream</em> is the most challenging “callback” technique to learn among those discussed in this post’ series; but as the outcome, you get significantly bigger opportunities.</p>
+
+<p>And again, if you want to learn more about FRP, here are a <a href="http://blog.scottlogic.com/2015/04/24/first-look-reactive-cocoa-3.html">couple</a> <a href="https://gist.github.com/staltz/868e7e9bc2a7b8c1f754">usefull</a> links for you to get started, and a <a href="https://www.raywenderlich.com/126522/reactivecocoa-vs-rxswift">comparison</a> of ReactiveSwift and RxSwift if you want to decide which one to use in your project.</p>
+
+<h2 id="advantages-of-using-streams"><a name="Stream_advantages"><a href="#Stream_advantages">Advantages of using Streams</a></a></h2>
+<ul>
+  <li>Generally universal tool that can be used wherever you need to “call back” to other programming entities. The stream is able to replace all the traditional callback techniques available in Cocoa, and does it gracefully.</li>
+  <li>Has a very strong community, so you won’t be left alone with your problem when using Stream.</li>
+  <li>Encourages writing code in a functional style rather than in imperative, which mitigates a <a href="https://www.quora.com/What-is-callback-hell">callback hell</a> problem and generally improves the code <a href="https://en.wikipedia.org/wiki/Cohesion_(computer_science)">cohesion</a>.</li>
+  <li>Stream libraries have Cocoa extensions with UI bindings that help with reducing the amount of code we write for updating the UI with app’s state changes.</li>
+  <li>Stream can be naturally combined with other streams to address a problem of having many dependent async operations.</li>
+  <li>The Stream borrows many advantages from <em>Events</em> and <em>Promises</em>:
+    <ul>
+      <li>Ability to transmit any set of data with the strict type checking by the compiler.</li>
+      <li>Support for multiple observers.</li>
+      <li>Ability to easily control the lifetime of the subscriptions.</li>
+      <li>Cancellation that automatically propagates and stops all related operations.</li>
+      <li>Error handling in one place.</li>
+      <li>Ability to recover from errors and continue execution.</li>
+      <li>Delayed notifications</li>
+      <li>Filtering and time sampling of notifications</li>
+      <li>Delivery of notifications to specific <code class="language-plaintext highlighter-rouge">OperationQueue</code></li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="disadvantages-of-using-streams"><a name="Stream_disadvantages"><a href="#Stream_disadvantages">Disadvantages of using Streams</a></a></h2>
+<ul>
+  <li>Considerably higher required skill-level than with other techniques. This is not a tool like Event, which works out of the box for you, you need to learn (a lot) how to cook it first.</li>
+  <li>Many sources of confusion even for seasoned developers:
+    <ul>
+      <li>Hot &amp; cold signals (streams). You need to understand the difference as this dramatically impacts how they should be used. In <strong>RxSwift</strong> Hot &amp; Cold signals are syntactically indistinguishable, which can lead to hard-to-find bugs.</li>
+      <li><a href="https://github.com/Reactive-Extensions/RxJS/blob/master/doc/api/core/observable.md">Long list</a> of <a href="http://rxmarbles.com/">exotic functions</a> applicable to the Stream makes developers look up for the definition and carefully read about the semantics of the method in order to avoid misusage.</li>
+      <li>It is impossible to predict the behavior of the Stream - how many events (and of which type) it will generate. You cannot guarantee the Stream will send one or many <em>value</em> events before it completes. An example is a networking request - the client code may expect to receive the response once, but instead, there can be multiple <em>value</em> events if the request streams the data, or if the networking code automatically requests next pages of a paginated list. With <strong>RxSwift</strong> this is also impossible to declare a Stream that cannot generate an <em>error</em> event, which means you always have to implement error handlers or expose your app for potential bugs if you choose to ignore errors.</li>
+    </ul>
+  </li>
+  <li>This has never been easier to massively leak the memory ever since the times we had manual reference counting in Objective-C (<code class="language-plaintext highlighter-rouge">[[object retain] autorelease]</code>, remember them?). Even when using <code class="language-plaintext highlighter-rouge">weak</code> and <code class="language-plaintext highlighter-rouge">unowned</code> for every reference inside the Closures, each time you start a Stream subscription you should explicitly limit its lifetime using <code class="language-plaintext highlighter-rouge">DisposeBag</code> from <strong>RxSwift</strong> or <code class="language-plaintext highlighter-rouge">Lifetime</code> from <strong>ReactiveSwift</strong>, or you risk leaking this subscription (and possibly other objects too) and ultimately ruining the app performance. If you prefer using <code class="language-plaintext highlighter-rouge">unowned</code> over <code class="language-plaintext highlighter-rouge">weak</code>, be prepared for crashes as well.</li>
+  <li>FRP frameworks encourage the use of custom operators borrowed from other functional languages. This often looks unnatural in Swift and adds ambiguity, unless you have a few years of Haskell programming in your background.</li>
+  <li>Heavyweight frameworks with the core functionality (<a href="https://github.com/ReactiveCocoa/ReactiveSwift">15,000</a> and <a href="https://github.com/ReactiveX/RxSwift">55,000</a> lines of code for two most popular FRP frameworks). This not only increases the size of your app but also extends the app’s launch time, just as with other dynamically loaded frameworks.</li>
+</ul>
+
+<hr />
+<p>Be safe, don’t feed gremlins after midnight, and write clean code.</p>
+
+      <h2>Your appreciation is my inspiration!</h2>
+      <p>I have tons of unpublished kick-ass materials and ideas, but I need your help! Consider sharing this article on <a href="https://twitter.com/share?url=http://nalexn.github.io/callbacks-part-3-promise-event-stream/?utm_source=share_tw&amp;text=Callbacks, Part 3: Promise, Event, and Stream (Functional Reactive Programming)&amp;hashtags=iosdev&amp;via=nallexn" title="Twitter" target="_blank" onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=500');return false;"><i class="fa fa-twitter share-button"></i></a>, <a href="https://www.facebook.com/sharer/sharer.php?u=http://nalexn.github.io/callbacks-part-3-promise-event-stream/?utm_source=share_fb&amp;display=popup&amp;quote=Callbacks, Part 3: Promise, Event, and Stream (Functional Reactive Programming)&amp;hashtag=#iosdev" title="Facebook" target="_blank" onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=500');return false;"><i class="fa fa-facebook-f share-button"></i></a> or <a href="https://www.linkedin.com/sharing/share-offsite/?url=http://nalexn.github.io/callbacks-part-3-promise-event-stream/?utm_source=share_in" title="LinkedIn" target="_blank" onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=500');return false;"><i class="fa fa-linkedin share-button"></i></a>. This tiny action helps to grow this blog and inspires me to post more! (Or if you are nuts, <a href="https://venmo.com/nallexn" target="_blank">Venmo</a> me a drink!)</p>
+      </p>
+      <p>You can subscribe to <a href="http://nalexn.github.io/feed.xml" target="_blank">RSS feed</a> or follow my <a href="https://twitter.com/nallexn" target="_blank">Twitter</a> for the new articles alerts.
+
+      <div style="width:0px; height:30px; display: block;"></div>
+      <h2>Most recent articles</h2>
+      <div class="content-box recent clearfix" style="padding: 20px 10px;">
+        
+        
+          
+          <article class="post">
+            
+              <a class="post-thumbnail" style="background-image: url(/assets/img/layers_001.jpg)" href="/separation-of-concerns/"></a>
+            
+            <div class="post-content">
+              <h2 class="post-title"><a href="/separation-of-concerns/">Separation of Concerns in Software Design</a></h2>
+              <p></p>
+              <span class="post-date">2020, Jan 16&nbsp;&nbsp;&nbsp;—&nbsp;</span>
+              <span class="post-words">10 minute read</span>
+            </div>
+          </article>
+          
+        
+          
+          <article class="post">
+            
+              <a class="post-thumbnail" style="background-image: url(/assets/img/observable_001.jpg)" href="/swiftui-observableobject/"></a>
+            
+            <div class="post-content">
+              <h2 class="post-title"><a href="/swiftui-observableobject/">Why I quit using the ObservableObject</a></h2>
+              <p></p>
+              <span class="post-date">2019, Dec 20&nbsp;&nbsp;&nbsp;—&nbsp;</span>
+              <span class="post-words">7 minute read</span>
+            </div>
+          </article>
+          
+        
+          
+          <article class="post">
+            
+              <a class="post-thumbnail" style="background-image: url(/assets/img/comparison_01.jpg)" href="/anyview-vs-group/"></a>
+            
+            <div class="post-content">
+              <h2 class="post-title"><a href="/anyview-vs-group/">Performance Battle: AnyView vs Group</a></h2>
+              <p></p>
+              <span class="post-date">2019, Dec 05&nbsp;&nbsp;&nbsp;—&nbsp;</span>
+              <span class="post-words">9 minute read</span>
+            </div>
+          </article>
+          
+        
+          
+          <article class="post">
+            
+              <a class="post-thumbnail" style="background-image: url(/assets/img/swiftui_unit_testing_01.jpg)" href="/swiftui-unit-testing/"></a>
+            
+            <div class="post-content">
+              <h2 class="post-title"><a href="/swiftui-unit-testing/">Who said we cannot unit test SwiftUI views?</a></h2>
+              <p></p>
+              <span class="post-date">2019, Nov 21&nbsp;&nbsp;&nbsp;—&nbsp;</span>
+              <span class="post-words">12 minute read</span>
+            </div>
+          </article>
+          
+        
+          
+          <article class="post">
+            
+              <a class="post-thumbnail" style="background-image: url(/assets/img/deep_link_swiftui_01.jpg)" href="/swiftui-deep-linking/"></a>
+            
+            <div class="post-content">
+              <h2 class="post-title"><a href="/swiftui-deep-linking/">Programmatic navigation in SwiftUI project</a></h2>
+              <p></p>
+              <span class="post-date">2019, Nov 08&nbsp;&nbsp;&nbsp;—&nbsp;</span>
+              <span class="post-words">7 minute read</span>
+            </div>
+          </article>
+          
+        
+        <article class="post">
+          <a class="post-thumbnail" style="background-image: url(/assets/img/launch_001.jpg)" href="/"></a>
+          <div class="post-content">
+            <h2 class="post-title"><a href="/">Browse All Articles</a></h2>
+            <p></p>
+            <span class="post-date">Top iOS programming stuff, no kidding!</span>
+          </div>
+        </article>
+      </div>
+    </div> <!-- End Wrap Content -->
+  </div> <!-- End Page Content -->
+</article> <!-- End Article Page -->
+
+</div>
+
+  </div>
+</body>
+</html>

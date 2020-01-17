@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-96224610-1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'UA-96224610-1');
+  </script>
+	<meta charset="utf-8">
+	<title>Quick Guide to KVO in Swift with code examples - Alexey Naumov</title>
+
+  <!-- Edit site and author settings in `_config.yml` to make the social details your own -->
+
+    <meta content="Alexey Naumov" property="og:site_name">
+  
+    <meta content="Quick Guide to KVO in Swift with code examples" property="og:title">
+  
+  
+    <meta content="article" property="og:type">
+  
+  
+    <meta content="Everything you need to know about Key-Value Observing" property="og:description">
+  
+  
+    <meta content="http://nalexn.github.io/kvo-guide-for-key-value-observing/" property="og:url">
+  
+  
+    <meta content="2019-09-20T14:30:00+03:00" property="article:published_time">
+    <meta content="http://nalexn.github.io/about/" property="article:author">
+  
+  
+    <meta content="http://nalexn.github.io/assets/img/kvo_001.jpg" property="og:image">
+  
+  
+    
+  
+  
+    <meta name="keywords" content="ios, swift, kvo">
+    
+    <meta content="ios" property="article:tag">
+    
+    <meta content="swift" property="article:tag">
+    
+    <meta content="kvo" property="article:tag">
+    
+  
+
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:site" content="@">
+    <meta name="twitter:creator" content="@nallexn">
+  
+    <meta name="twitter:title" content="Quick Guide to KVO in Swift with code examples">
+  
+  
+    <meta name="twitter:url" content="http://nalexn.github.io/kvo-guide-for-key-value-observing/">
+  
+  
+    <meta name="twitter:description" content="Everything you need to know about Key-Value Observing">
+  
+
+	<meta name="description" content="Everything you need to know about Key-Value Observing">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+	<meta property="og:image" content="">
+  <link rel="icon" sizes="16x16" href="/assets/img/favicon/favicon.ico">
+  <link rel="icon" sizes="32x32" href="/assets/img/favicon/favicon-32.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="/assets/img/favicon/favicon-114.png">
+	<!-- Chrome, Firefox OS and Opera -->
+	<meta name="theme-color" content="#263959">
+	<!-- Windows Phone -->
+	<meta name="msapplication-navbutton-color" content="#263959">
+	<!-- iOS Safari -->
+	<meta name="apple-mobile-web-app-status-bar-style" content="#263959">
+	<!-- Google Fonts -->
+	<link href="https://fonts.googleapis.com/css?family=PT+Serif:400,700" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css?family=Lato:300,400,700" rel="stylesheet">
+	<!-- Font Awesome -->
+	<link rel="stylesheet" href="/assets/fonts/font-awesome/css/font-awesome.min.css">
+	<!-- Styles -->
+	<link rel="stylesheet" href="/assets/css/main.css?v=2">
+</head>
+
+<body>
+  <div class="wrapper">
+    <aside class="sidebar">
+  <header>
+    <div class="about">
+      <div class="author-logo">
+      <span class="hover-message">Let's connect on LinkedIn!</span>
+      <div class="cover-author-image">
+        <a href="https://in.linkedin.com/in/nalexn" target="_blank"><img src="/assets/img/profile-image.jpg" alt="Alexey Naumov"></a>
+      </div>
+      </div>
+      <div class="author-name">Alexey Naumov</div>
+      <a href="/"><img src="/assets/img/content_00.png" alt="" style="-webkit-border-radius: 0%; border-radius: 0%;"></a>
+    </div>
+  </header> <!-- End Header -->
+  <footer>
+    <section class="contact">
+      <h3 class="contact-title">Links</h3>
+      <ul>
+        <li><a href="https://twitter.com/nallexn" target="_blank"><i class="fa fa-twitter" aria-hidden="true"></i></a></li>
+        <li><a href="https://in.linkedin.com/in/nalexn" target="_blank"><i class="fa fa-linkedin"></i></a></li>
+        <li><a href="https://github.com/nalexn" target="_blank"><i class="fa fa-github"></i></a></li>
+        <li><a href="https://stackoverflow.com/users/2923345?tab=profile" target="_blank"><i class="fa fa-stack-overflow" aria-hidden="true"></i></a></li>
+        <li><a href="http://nalexn.github.io/feed.xml" target="_blank"><i class="fa fa-rss"></i></a></li>
+      </ul>
+    </section> <!-- End Section Contact -->
+    <div class="copyright">
+      <p>2020 &copy; Alexey Naumov</p>
+    </div>
+  </footer> <!-- End Footer -->
+</aside> <!-- End Sidebar -->
+<div class="content-box clearfix">
+  <article class="article-page">
+  <div class="page-content">
+    <div class="wrap-content">
+      <header class="header-page">
+        <h1 class="page-title">Quick Guide to KVO in Swift with code examples</h1>
+        <div class="page-date"><span>2019, Sep 20&nbsp;&nbsp;&nbsp;&nbsp;</span></div>
+      </header>
+      <div class="page-image"><img class="page-image" src=/assets/img/kvo_001.jpg alt="Quick Guide to KVO in Swift with code examples"></div>
+      <h2 id="tldr">TL;DR</h2>
+
+<p>For the <strong>KVO code example</strong> in Swift jump stright to the <a href="https://nalexn.github.io/kvo-guide-for-key-value-observing/#kvo_swift">KVO in Swift</a> section.</p>
+
+<h2 id="the-concept">The concept</h2>
+
+<p><strong>KVO</strong>, which stands for Key-Value Observing, is one of the techniques for observing the program state changes available in Objective-C and Swift.</p>
+
+<p>The concept is simple: when we have an object with some instance variables, KVO allows other objects to establish surveillance on changes for any of those instance variables.</p>
+
+<p>KVO is a practical example of the <a href="https://en.wikipedia.org/wiki/Observer_pattern">Observer pattern</a>. What makes Objective-C (and Obj-C bridged Swift) unique is that every instance variable that you add to the class becomes observable through KVO right away! (There are exceptions to this rule, I’ll talk about them in the article).</p>
+
+<p>But in the majority of other programming languages, such a tool doesn’t come out of the box - you usually need to write additional code in the variable’s setter to notify the observers about the value changes.</p>
+
+<blockquote>
+  <p>Swift has inherited KVO from Objective-C, so for a full picture you need to understand how KVO works in Objective-C.</p>
+</blockquote>
+
+<h2 id="kvo-in-objective-c">KVO in Objective-C</h2>
+
+<p>Consider we have a class named <code class="language-plaintext highlighter-rouge">Person</code> with properties <code class="language-plaintext highlighter-rouge">name</code> and <code class="language-plaintext highlighter-rouge">age</code></p>
+
+<div class="language-objc highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+</pre></td><td class="rouge-code"><pre><span class="k">@interface</span> <span class="nc">Person</span><span class="p">:</span> <span class="nc">NSObject</span>
+ 
+<span class="k">@property</span> <span class="p">(</span><span class="n">nonatomic</span><span class="p">,</span> <span class="n">strong</span><span class="p">)</span> <span class="n">NSString</span> <span class="o">*</span><span class="n">name</span><span class="p">;</span>
+<span class="k">@property</span> <span class="p">(</span><span class="n">nonatomic</span><span class="p">,</span> <span class="n">assign</span><span class="p">)</span> <span class="n">NSInteger</span> <span class="n">age</span><span class="p">;</span>
+ 
+<span class="k">@end</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>The objects of this class now are able to communicate the changes of the properties through KVO, but with no additional code - this feature comes for free!</p>
+
+<p>So the only thing we need to do is to start the observation in another class:</p>
+
+<div class="language-objc highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+</pre></td><td class="rouge-code"><pre><span class="k">@implementation</span> <span class="nc">SomeOtherClass</span>
+
+<span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">observeChanges</span><span class="p">:(</span><span class="n">Person</span> <span class="o">*</span><span class="p">)</span><span class="nv">person</span> <span class="p">{</span>
+    <span class="p">[</span><span class="n">person</span> <span class="nf">addObserver</span><span class="p">:</span><span class="n">self</span>
+             <span class="nl">forKeyPath:</span><span class="s">@"age"</span>
+                <span class="nl">options:</span><span class="n">NSKeyValueObservingOptionNew</span>
+                <span class="nl">context:</span><span class="nb">nil</span><span class="p">];</span>
+<span class="p">}</span>
+
+<span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">observeValueForKeyPath</span><span class="p">:(</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">keyPath</span>
+                      <span class="nf">ofObject</span><span class="p">:(</span><span class="n">id</span><span class="p">)</span><span class="nv">object</span>
+                        <span class="nf">change</span><span class="p">:(</span><span class="n">NSDictionary</span><span class="o">&lt;</span><span class="n">NSKeyValueChangeKey</span><span class="p">,</span><span class="n">id</span><span class="o">&gt;</span> <span class="o">*</span><span class="p">)</span><span class="nv">change</span>
+                       <span class="nf">context</span><span class="p">:(</span><span class="kt">void</span> <span class="o">*</span><span class="p">)</span><span class="nv">context</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">([</span><span class="n">keyPath</span> <span class="nf">isEqualToString</span><span class="p">:</span><span class="s">@"age"</span><span class="p">])</span> <span class="p">{</span>
+        <span class="n">NSNumber</span> <span class="o">*</span><span class="n">ageNumber</span> <span class="o">=</span> <span class="n">change</span><span class="p">[</span><span class="nf">NSKeyValueChangeNewKey</span><span class="p">];</span>
+        <span class="n">NSInteger</span> <span class="n">age</span> <span class="o">=</span> <span class="p">[</span><span class="n">ageNumber</span> <span class="nf">integerValue</span><span class="p">];</span>
+        <span class="n">NSLog</span><span class="p">(</span><span class="s">@"New age is: %@"</span><span class="p">,</span> <span class="n">age</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">@end</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p><strong>That’s it!</strong> Now every time the <code class="language-plaintext highlighter-rouge">age</code> property changes on the <code class="language-plaintext highlighter-rouge">Person</code> we’ll have <code class="language-plaintext highlighter-rouge">New age is: ...</code> printed to the log from the observer’s side.</p>
+
+<p>As you can see, there are two methods involved in KVO communication.</p>
+
+<p>The first is <code class="language-plaintext highlighter-rouge">addObserver:forKeyPath:options:context:</code>, which can be called on any <code class="language-plaintext highlighter-rouge">NSObject</code>, including <code class="language-plaintext highlighter-rouge">Person</code>. This method attaches the observer to an object.</p>
+
+<p>The second is <code class="language-plaintext highlighter-rouge">observeValueForKeyPath:ofObject:change:context:</code> which is another standard method in <code class="language-plaintext highlighter-rouge">NSObject</code> that we <strong>have to override</strong> in our observer’s class. This method is used for handling the observation notifications.</p>
+
+<p>There is a third method, <code class="language-plaintext highlighter-rouge">removeObserver:forKeyPath:context:</code>, which allows you to stop the observation. It’s important to unsubscribe from notifications if the observed object outlives the observer. So the subscription just has to be removed in the observer’s <code class="language-plaintext highlighter-rouge">dealloc</code> method.</p>
+
+<p>Now, let’s talk about the parameters of the methods used in KVO.</p>
+
+<p><strong>The method we used for attaching the observer is declared in <code class="language-plaintext highlighter-rouge">NSObject</code></strong></p>
+
+<div class="language-objc highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+</pre></td><td class="rouge-code"><pre><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">addObserver</span><span class="p">:(</span><span class="n">NSObject</span> <span class="o">*</span><span class="p">)</span><span class="nv">observer</span> 
+         <span class="nf">forKeyPath</span><span class="p">:(</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">keyPath</span>
+            <span class="nf">options</span><span class="p">:(</span><span class="n">NSKeyValueObservingOptions</span><span class="p">)</span><span class="nv">options</span>
+            <span class="nf">context</span><span class="p">:(</span><span class="n">nullable</span> <span class="kt">void</span> <span class="o">*</span><span class="p">)</span><span class="nv">context</span><span class="p">;</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<ul>
+  <li><strong>observer</strong> is the object that will be receiving the change notifications. Usually, you provide <code class="language-plaintext highlighter-rouge">self</code> in this parameter, as the <code class="language-plaintext highlighter-rouge">addObserver:</code> is called from inside own instance method.</li>
+  <li><strong>keyPath</strong> is a string parameter that in simplest case is just the <em>name of the property</em> you want to observe. If the property references a complex object hierarchy it can be a set of property names for digging into that hierarchy: <code class="language-plaintext highlighter-rouge">"person.father.age"</code></li>
+  <li><strong>options</strong> is an <code class="language-plaintext highlighter-rouge">enum</code> that allows for customizing what information is delivered with notification and when it should be sent. Available options are <code class="language-plaintext highlighter-rouge">NSKeyValueObservingOptionNew</code> and <code class="language-plaintext highlighter-rouge">NSKeyValueObservingOptionOld</code>, which control whether to include the most recent and the previous values respectively. There is also <code class="language-plaintext highlighter-rouge">NSKeyValueObservingOptionInitial</code> for triggering the notification right after the subscription, and <code class="language-plaintext highlighter-rouge">NSKeyValueObservingOptionPrior</code> for diffing the changes in a collection, such as instertions of deletions in <code class="language-plaintext highlighter-rouge">NSArray</code>.</li>
+  <li><strong>context</strong> is a reference to object of an arbitrary class, which can be helpful for identifying the subscription in certain complex use cases, such as when working with CoreData. In most other cases you simply provide <code class="language-plaintext highlighter-rouge">nil</code> here.</li>
+</ul>
+
+<p><strong>The method we used for handling the update notifications</strong></p>
+
+<div class="language-objc highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+</pre></td><td class="rouge-code"><pre><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">observeValueForKeyPath</span><span class="p">:(</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">keyPath</span>
+                      <span class="nf">ofObject</span><span class="p">:(</span><span class="n">id</span><span class="p">)</span><span class="nv">object</span>
+                        <span class="nf">change</span><span class="p">:(</span><span class="n">NSDictionary</span><span class="o">&lt;</span><span class="n">NSKeyValueChangeKey</span><span class="p">,</span><span class="n">id</span><span class="o">&gt;</span> <span class="o">*</span><span class="p">)</span><span class="nv">change</span>
+                       <span class="nf">context</span><span class="p">:(</span><span class="kt">void</span> <span class="o">*</span><span class="p">)</span><span class="nv">context</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+<ul>
+  <li><strong>keyPath</strong> is the same string value we provided when attaching the observer. You may ask why it is provided here as well. The reason is that we may be observing multiple properties at once, so this parameter can be used to distinguish the notifications for one property from another.</li>
+  <li><strong>object</strong> is the observed object. Since we can observe changes on more than one object, this parameter allows us to identify who’s property has changed.</li>
+  <li><strong>change</strong> is the dictionary with information about the changed value. Based on the <code class="language-plaintext highlighter-rouge">NSKeyValueObservingOptions</code> we provided upon subscription, this dictionary may contain the current value under key <code class="language-plaintext highlighter-rouge">NSKeyValueChangeNewKey</code>, previous value for <code class="language-plaintext highlighter-rouge">NSKeyValueChangeOldKey</code>, and the “diff” information when observing changes in a collection: <code class="language-plaintext highlighter-rouge">NSKeyValueChangeIndexesKey</code> and <code class="language-plaintext highlighter-rouge">NSKeyValueChangeKindKey</code></li>
+  <li><strong>context</strong> is the reference provided upon subscription. Again, used for proper observation identification and in most cases can be ignored.</li>
+</ul>
+
+<h3 id="when-kvo-does-not-work">When KVO does not work</h3>
+
+<p>Even though KVO looks like magic, there is nothing extraordinary behind it. In fact, you can have direct access to its internals, which are hidden by default.</p>
+
+<p>The trick is how Objective-C generates setter for properties. When you declare a property like</p>
+
+<div class="language-objc highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre><span class="k">@property</span> <span class="p">(</span><span class="n">nonatomic</span><span class="p">,</span> <span class="n">assign</span><span class="p">)</span> <span class="n">NSInteger</span> <span class="n">age</span><span class="p">;</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>The factual setter generated by Objective-C is equivalent to the following:</p>
+
+<div class="language-objc highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+</pre></td><td class="rouge-code"><pre><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">setAge</span><span class="p">:(</span><span class="n">NSInteger</span><span class="p">)</span><span class="nv">age</span> <span class="p">{</span>
+    <span class="p">[</span><span class="n">self</span> <span class="nf">willChangeValueForKey</span><span class="p">:</span><span class="s">@"age"</span><span class="p">];</span>
+    <span class="n">_age</span> <span class="o">=</span> <span class="n">age</span><span class="p">;</span>
+    <span class="p">[</span><span class="n">self</span> <span class="nf">didChangeValueForKey</span><span class="p">:</span><span class="s">@"age"</span><span class="p">];</span>
+<span class="p">}</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>And if you explicitly define the setter without calling these <code class="language-plaintext highlighter-rouge">willChangeValueForKey</code> and <code class="language-plaintext highlighter-rouge">didChangeValueForKey</code></p>
+
+<div class="language-objc highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre></td><td class="rouge-code"><pre><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">setAge</span><span class="p">:(</span><span class="n">NSInteger</span><span class="p">)</span><span class="nv">age</span> <span class="p">{</span>
+    <span class="n">_age</span> <span class="o">=</span> <span class="n">age</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>… the KVO will stop working for this property.</p>
+
+<p>So basically, these two methods <code class="language-plaintext highlighter-rouge">willChangeValueForKey</code> and <code class="language-plaintext highlighter-rouge">didChangeValueForKey</code> allow KVO to deliver the updates to the subscribers, and the developer can opt-out by omitting those calls from the setter.</p>
+
+<p>It is important to understand that every <code class="language-plaintext highlighter-rouge">@property</code> synthesized by Objective-C adds a hidden instance variable with <code class="language-plaintext highlighter-rouge">_</code> prefix.</p>
+
+<p>For example, <code class="language-plaintext highlighter-rouge">@property NSInteger age;</code> generates an instance variable with the name <code class="language-plaintext highlighter-rouge">_age</code> that can be accessed just like the property:</p>
+
+<div class="language-objc highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="rouge-code"><pre><span class="n">self</span><span class="p">.</span><span class="n">age</span> <span class="o">=</span> <span class="mi">25</span><span class="p">;</span>
+<span class="n">self</span><span class="p">.</span><span class="n">_age</span> <span class="o">=</span> <span class="mi">25</span><span class="p">;</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>The difference is that <code class="language-plaintext highlighter-rouge">self.age = 25;</code> triggers setter <code class="language-plaintext highlighter-rouge">setAge:</code>, while <code class="language-plaintext highlighter-rouge">self._age = 25;</code> changes the stored variable directly.</p>
+
+<p>This means that even if the KVO is enabled for the <code class="language-plaintext highlighter-rouge">age</code> property, the KVO communication will work correctly for <code class="language-plaintext highlighter-rouge">self.age = 25;</code> and won’t deliver an update for <code class="language-plaintext highlighter-rouge">self._age = 25;</code></p>
+
+<p>Another way to break free from KVO is to not use <code class="language-plaintext highlighter-rouge">@property</code> in the first place, but instead store the instance variable in the anonymous category of the class:</p>
+
+<div class="language-objc highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+</pre></td><td class="rouge-code"><pre><span class="k">@interface</span> <span class="nc">Person</span> <span class="p">()</span> <span class="p">{</span>
+    <span class="n">NSInteger</span> <span class="n">_privateVariable</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="k">@end</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>For such variables, Objective-C does not generate setter and getter, thus not enabling KVO.</p>
+
+<h2 id="kvo-in-swift"><a name="kvo_swift"><a href="#kvo_swift">KVO in Swift</a></a></h2>
+
+<p>Swift has inherited the support for the KVO from Objective-C, but unlike the latter, KVO is disabled in Swift classes by default.</p>
+
+<p>Objective-C classes used in Swift keep KVO enabled, but for a Swift class we need to set the base class to <code class="language-plaintext highlighter-rouge">NSObject</code> plus add <code class="language-plaintext highlighter-rouge">@objc dynamic</code> attributes to the variables:</p>
+
+<div class="language-swift highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+</pre></td><td class="rouge-code"><pre><span class="kd">class</span> <span class="kt">Person</span><span class="p">:</span> <span class="kt">NSObject</span> <span class="p">{</span>
+    <span class="kd">@objc</span> <span class="kd">dynamic</span> <span class="k">var</span> <span class="nv">age</span><span class="p">:</span> <span class="kt">Int</span>
+    <span class="kd">@objc</span> <span class="kd">dynamic</span> <span class="k">var</span> <span class="nv">name</span><span class="p">:</span> <span class="kt">String</span>
+<span class="p">}</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>There are two APIs available in Swift for Key-Value Observing: the old one, which came from Objective-C, and the new one, which is more flexible, safe and Swift-friendly.</p>
+
+<p>Let’s start with the <strong>new one</strong>:</p>
+
+<div class="language-swift highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+</pre></td><td class="rouge-code"><pre><span class="kd">class</span> <span class="kt">PersonObserver</span> <span class="p">{</span>
+
+    <span class="k">var</span> <span class="nv">kvoToken</span><span class="p">:</span> <span class="kt">NSKeyValueObservation</span><span class="p">?</span>
+    
+    <span class="kd">func</span> <span class="nf">observe</span><span class="p">(</span><span class="nv">person</span><span class="p">:</span> <span class="kt">Person</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">kvoToken</span> <span class="o">=</span> <span class="n">person</span><span class="o">.</span><span class="nf">observe</span><span class="p">(\</span><span class="o">.</span><span class="n">age</span><span class="p">,</span> <span class="nv">options</span><span class="p">:</span> <span class="o">.</span><span class="k">new</span><span class="p">)</span> <span class="p">{</span> <span class="p">(</span><span class="n">person</span><span class="p">,</span> <span class="n">change</span><span class="p">)</span> <span class="k">in</span>
+            <span class="k">guard</span> <span class="k">let</span> <span class="nv">age</span> <span class="o">=</span> <span class="n">change</span><span class="o">.</span><span class="k">new</span> <span class="k">else</span> <span class="p">{</span> <span class="k">return</span> <span class="p">}</span>
+            <span class="nf">print</span><span class="p">(</span><span class="s">"New age is: </span><span class="se">\(</span><span class="n">age</span><span class="se">)</span><span class="s">"</span><span class="p">)</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    
+    <span class="kd">deinit</span> <span class="p">{</span>
+        <span class="n">kvoToken</span><span class="p">?</span><span class="o">.</span><span class="nf">invalidate</span><span class="p">()</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>As you can see, the new API is using a closure callback for delivering the change notification right in the place where the subscription started.</p>
+
+<p>This is more convenient and safe because we no longer need to check the <code class="language-plaintext highlighter-rouge">keyPath</code>, <code class="language-plaintext highlighter-rouge">object</code> or <code class="language-plaintext highlighter-rouge">context</code>, - no other notifications are delivered in that closure, just the one we’ve subscribed on.</p>
+
+<p>There is a new way for managing the observation lifetime - the act of subscribing returns a token of type <code class="language-plaintext highlighter-rouge">NSKeyValueObservation</code> which has to be stored somewhere, for example, in an instance variable of the observer class.</p>
+
+<p>Later on, we can call <code class="language-plaintext highlighter-rouge">invalidate()</code> on that token to stop the observation, like in the <code class="language-plaintext highlighter-rouge">deinit</code> method above.</p>
+
+<p>The final change is related to the keyPath. String was error-prone because when you rename a variable the compiler won’t be able to tell you that the keyPath now leads to nowhere. Instead, this new API is using Swift’s special type for keyPath, which allows the compiler to verify the path is valid.</p>
+
+<p>The <code class="language-plaintext highlighter-rouge">options</code> parameter has just the same set of options as in Objective-C. If you need to provide more than one option, you just bundle them in an array: <code class="language-plaintext highlighter-rouge">options: [.new, .old]</code></p>
+
+<p>The old API is also available, although it maintained all its disadvantages, so I encourage you to use the new API instead.</p>
+
+<p>Here is the <strong>old one</strong>:</p>
+
+<div class="language-swift highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+</pre></td><td class="rouge-code"><pre><span class="kd">class</span> <span class="kt">PersonObserver</span><span class="p">:</span> <span class="kt">NSObject</span> <span class="p">{</span>
+    
+    <span class="kd">func</span> <span class="nf">observe</span><span class="p">(</span><span class="nv">person</span><span class="p">:</span> <span class="kt">Person</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">person</span><span class="o">.</span><span class="nf">addObserver</span><span class="p">(</span><span class="k">self</span><span class="p">,</span> <span class="nv">forKeyPath</span><span class="p">:</span> <span class="s">"age"</span><span class="p">,</span>
+                           <span class="nv">options</span><span class="p">:</span> <span class="o">.</span><span class="k">new</span><span class="p">,</span> <span class="nv">context</span><span class="p">:</span> <span class="kc">nil</span><span class="p">)</span>
+    <span class="p">}</span>
+    
+    <span class="k">override</span> <span class="kd">func</span> <span class="nf">observeValue</span><span class="p">(</span><span class="n">forKeyPath</span> <span class="nv">keyPath</span><span class="p">:</span> <span class="kt">String</span><span class="p">?,</span>
+                               <span class="n">of</span> <span class="nv">object</span><span class="p">:</span> <span class="kt">Any</span><span class="p">?,</span>
+                               <span class="nv">change</span><span class="p">:</span> <span class="p">[</span><span class="kt">NSKeyValueChangeKey</span> <span class="p">:</span> <span class="kt">Any</span><span class="p">]?,</span>
+                               <span class="nv">context</span><span class="p">:</span> <span class="kt">UnsafeMutableRawPointer</span><span class="p">?)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="n">keyPath</span> <span class="o">==</span> <span class="s">"age"</span><span class="p">,</span>
+           <span class="k">let</span> <span class="nv">age</span> <span class="o">=</span> <span class="n">change</span><span class="p">?[</span><span class="o">.</span><span class="n">newKey</span><span class="p">]</span> <span class="p">{</span>
+             <span class="nf">print</span><span class="p">(</span><span class="s">"New age is: </span><span class="se">\(</span><span class="n">age</span><span class="se">)</span><span class="s">"</span><span class="p">)</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>The old API <strong>requires</strong> the observer to be an <code class="language-plaintext highlighter-rouge">NSObject</code> descendant as well. We also need to verify the <code class="language-plaintext highlighter-rouge">keyPath</code>, <code class="language-plaintext highlighter-rouge">object</code>, and <code class="language-plaintext highlighter-rouge">context</code>, since other notifications are also delivered in this method, just like in Objective-C.</p>
+
+<h2 id="kvo-alternatives">KVO alternatives</h2>
+
+<p>There are quite a few other techniques in modern iOS development serving the same purpose: propagation of the state changes. And I have to say that KVO is the one that is used <strong>least often</strong> because alternatives often outpace it in convenience and versatility. In fact, I wrote a series of articles where I covered <strong>all</strong> the available tools for state change propagation and thoroughly described <strong>the pros and cons</strong> of each. Here are quick references:</p>
+
+<ul>
+  <li><a href="https://nalexn.github.io/callbacks-part-1-delegation-notificationcenter-kvo/#delegate">delegate</a></li>
+  <li><a href="https://nalexn.github.io/callbacks-part-1-delegation-notificationcenter-kvo/#NotificationCenter">NotificationCenter</a></li>
+  <li><a href="https://nalexn.github.io/callbacks-part-1-delegation-notificationcenter-kvo/#KeyValueObserving">KVO</a></li>
+  <li><a href="https://nalexn.github.io/callbacks-part-2-closure-target-action-responder-chain/#Closure_Block">Closure</a></li>
+  <li><a href="https://nalexn.github.io/callbacks-part-2-closure-target-action-responder-chain/#Target-Action">Target-Action</a></li>
+  <li><a href="https://nalexn.github.io/callbacks-part-2-closure-target-action-responder-chain/#Responder_chain">Responder Chain</a></li>
+  <li><a href="https://nalexn.github.io/callbacks-part-3-promise-event-stream/#Promise">Promise</a></li>
+  <li><a href="https://nalexn.github.io/callbacks-part-3-promise-event-stream/#Event">Event</a></li>
+  <li><a href="https://nalexn.github.io/callbacks-part-3-promise-event-stream/#Stream">Stream of values</a></li>
+</ul>
+
+<p>The final post in that series of articles is the <a href="https://nalexn.github.io/state-management-guide-ios/"><strong>ultimate guide</strong></a> where I describe the practical situations where <strong>one tool suits better than the others</strong>.</p>
+
+<p>Finally, with the release of Apple’s <strong>Combine</strong> framework, KVO now stands no chances to maintain its original popularity, but it is still important to know how it works! And I hope this article was helpful for you.</p>
+
+<p>Feel free to add me on <a href="https://www.linkedin.com/in/nalexn/">LinkedIn</a> or <a href="https://twitter.com/nallexn">Twitter</a> and ask questions! I also post new articles alerts there!</p>
+
+      <h2>Your appreciation is my inspiration!</h2>
+      <p>I have tons of unpublished kick-ass materials and ideas, but I need your help! Consider sharing this article on <a href="https://twitter.com/share?url=http://nalexn.github.io/kvo-guide-for-key-value-observing/?utm_source=share_tw&amp;text=Quick Guide to KVO in Swift with code examples&amp;hashtags=iosdev&amp;via=nallexn" title="Twitter" target="_blank" onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=500');return false;"><i class="fa fa-twitter share-button"></i></a>, <a href="https://www.facebook.com/sharer/sharer.php?u=http://nalexn.github.io/kvo-guide-for-key-value-observing/?utm_source=share_fb&amp;display=popup&amp;quote=Quick Guide to KVO in Swift with code examples&amp;hashtag=#iosdev" title="Facebook" target="_blank" onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=500');return false;"><i class="fa fa-facebook-f share-button"></i></a> or <a href="https://www.linkedin.com/sharing/share-offsite/?url=http://nalexn.github.io/kvo-guide-for-key-value-observing/?utm_source=share_in" title="LinkedIn" target="_blank" onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=500');return false;"><i class="fa fa-linkedin share-button"></i></a>. This tiny action helps to grow this blog and inspires me to post more! (Or if you are nuts, <a href="https://venmo.com/nallexn" target="_blank">Venmo</a> me a drink!)</p>
+      </p>
+      <p>You can subscribe to <a href="http://nalexn.github.io/feed.xml" target="_blank">RSS feed</a> or follow my <a href="https://twitter.com/nallexn" target="_blank">Twitter</a> for the new articles alerts.
+
+      <div style="width:0px; height:30px; display: block;"></div>
+      <h2>Most recent articles</h2>
+      <div class="content-box recent clearfix" style="padding: 20px 10px;">
+        
+        
+          
+          <article class="post">
+            
+              <a class="post-thumbnail" style="background-image: url(/assets/img/layers_001.jpg)" href="/separation-of-concerns/"></a>
+            
+            <div class="post-content">
+              <h2 class="post-title"><a href="/separation-of-concerns/">Separation of Concerns in Software Design</a></h2>
+              <p></p>
+              <span class="post-date">2020, Jan 16&nbsp;&nbsp;&nbsp;—&nbsp;</span>
+              <span class="post-words">10 minute read</span>
+            </div>
+          </article>
+          
+        
+          
+          <article class="post">
+            
+              <a class="post-thumbnail" style="background-image: url(/assets/img/observable_001.jpg)" href="/swiftui-observableobject/"></a>
+            
+            <div class="post-content">
+              <h2 class="post-title"><a href="/swiftui-observableobject/">Why I quit using the ObservableObject</a></h2>
+              <p></p>
+              <span class="post-date">2019, Dec 20&nbsp;&nbsp;&nbsp;—&nbsp;</span>
+              <span class="post-words">7 minute read</span>
+            </div>
+          </article>
+          
+        
+          
+          <article class="post">
+            
+              <a class="post-thumbnail" style="background-image: url(/assets/img/comparison_01.jpg)" href="/anyview-vs-group/"></a>
+            
+            <div class="post-content">
+              <h2 class="post-title"><a href="/anyview-vs-group/">Performance Battle: AnyView vs Group</a></h2>
+              <p></p>
+              <span class="post-date">2019, Dec 05&nbsp;&nbsp;&nbsp;—&nbsp;</span>
+              <span class="post-words">9 minute read</span>
+            </div>
+          </article>
+          
+        
+          
+          <article class="post">
+            
+              <a class="post-thumbnail" style="background-image: url(/assets/img/swiftui_unit_testing_01.jpg)" href="/swiftui-unit-testing/"></a>
+            
+            <div class="post-content">
+              <h2 class="post-title"><a href="/swiftui-unit-testing/">Who said we cannot unit test SwiftUI views?</a></h2>
+              <p></p>
+              <span class="post-date">2019, Nov 21&nbsp;&nbsp;&nbsp;—&nbsp;</span>
+              <span class="post-words">12 minute read</span>
+            </div>
+          </article>
+          
+        
+          
+          <article class="post">
+            
+              <a class="post-thumbnail" style="background-image: url(/assets/img/deep_link_swiftui_01.jpg)" href="/swiftui-deep-linking/"></a>
+            
+            <div class="post-content">
+              <h2 class="post-title"><a href="/swiftui-deep-linking/">Programmatic navigation in SwiftUI project</a></h2>
+              <p></p>
+              <span class="post-date">2019, Nov 08&nbsp;&nbsp;&nbsp;—&nbsp;</span>
+              <span class="post-words">7 minute read</span>
+            </div>
+          </article>
+          
+        
+        <article class="post">
+          <a class="post-thumbnail" style="background-image: url(/assets/img/launch_001.jpg)" href="/"></a>
+          <div class="post-content">
+            <h2 class="post-title"><a href="/">Browse All Articles</a></h2>
+            <p></p>
+            <span class="post-date">Top iOS programming stuff, no kidding!</span>
+          </div>
+        </article>
+      </div>
+    </div> <!-- End Wrap Content -->
+  </div> <!-- End Page Content -->
+</article> <!-- End Article Page -->
+
+</div>
+
+  </div>
+</body>
+</html>

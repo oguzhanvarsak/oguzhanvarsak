@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-96224610-1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'UA-96224610-1');
+  </script>
+	<meta charset="utf-8">
+	<title>Programmatic navigation in SwiftUI project - Alexey Naumov</title>
+
+  <!-- Edit site and author settings in `_config.yml` to make the social details your own -->
+
+    <meta content="Alexey Naumov" property="og:site_name">
+  
+    <meta content="Programmatic navigation in SwiftUI project" property="og:title">
+  
+  
+    <meta content="article" property="og:type">
+  
+  
+    <meta content="Deep Links, Notifications, Quick Actions, Shortcuts and more" property="og:description">
+  
+  
+    <meta content="http://nalexn.github.io/swiftui-deep-linking/" property="og:url">
+  
+  
+    <meta content="2019-11-08T08:30:00+03:00" property="article:published_time">
+    <meta content="http://nalexn.github.io/about/" property="article:author">
+  
+  
+    <meta content="http://nalexn.github.io/assets/img/deep_link_swiftui_01.jpg" property="og:image">
+  
+  
+    
+  
+  
+    <meta name="keywords" content="iOS, swift, universal, link, deeplink, url, scheme, nsuseractivity, handoff, spotlight, search">
+    
+    <meta content="iOS" property="article:tag">
+    
+    <meta content="swift" property="article:tag">
+    
+    <meta content="universal" property="article:tag">
+    
+    <meta content="link" property="article:tag">
+    
+    <meta content="deeplink" property="article:tag">
+    
+    <meta content="url" property="article:tag">
+    
+    <meta content="scheme" property="article:tag">
+    
+    <meta content="nsuseractivity" property="article:tag">
+    
+    <meta content="handoff" property="article:tag">
+    
+    <meta content="spotlight" property="article:tag">
+    
+    <meta content="search" property="article:tag">
+    
+  
+
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:site" content="@">
+    <meta name="twitter:creator" content="@nallexn">
+  
+    <meta name="twitter:title" content="Programmatic navigation in SwiftUI project">
+  
+  
+    <meta name="twitter:url" content="http://nalexn.github.io/swiftui-deep-linking/">
+  
+  
+    <meta name="twitter:description" content="Deep Links, Notifications, Quick Actions, Shortcuts and more">
+  
+
+	<meta name="description" content="Deep Links, Notifications, Quick Actions, Shortcuts and more">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+	<meta property="og:image" content="">
+  <link rel="icon" sizes="16x16" href="/assets/img/favicon/favicon.ico">
+  <link rel="icon" sizes="32x32" href="/assets/img/favicon/favicon-32.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="/assets/img/favicon/favicon-114.png">
+	<!-- Chrome, Firefox OS and Opera -->
+	<meta name="theme-color" content="#263959">
+	<!-- Windows Phone -->
+	<meta name="msapplication-navbutton-color" content="#263959">
+	<!-- iOS Safari -->
+	<meta name="apple-mobile-web-app-status-bar-style" content="#263959">
+	<!-- Google Fonts -->
+	<link href="https://fonts.googleapis.com/css?family=PT+Serif:400,700" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css?family=Lato:300,400,700" rel="stylesheet">
+	<!-- Font Awesome -->
+	<link rel="stylesheet" href="/assets/fonts/font-awesome/css/font-awesome.min.css">
+	<!-- Styles -->
+	<link rel="stylesheet" href="/assets/css/main.css?v=2">
+</head>
+
+<body>
+  <div class="wrapper">
+    <aside class="sidebar">
+  <header>
+    <div class="about">
+      <div class="author-logo">
+      <span class="hover-message">Let's connect on LinkedIn!</span>
+      <div class="cover-author-image">
+        <a href="https://in.linkedin.com/in/nalexn" target="_blank"><img src="/assets/img/profile-image.jpg" alt="Alexey Naumov"></a>
+      </div>
+      </div>
+      <div class="author-name">Alexey Naumov</div>
+      <a href="/"><img src="/assets/img/content_00.png" alt="" style="-webkit-border-radius: 0%; border-radius: 0%;"></a>
+    </div>
+  </header> <!-- End Header -->
+  <footer>
+    <section class="contact">
+      <h3 class="contact-title">Links</h3>
+      <ul>
+        <li><a href="https://twitter.com/nallexn" target="_blank"><i class="fa fa-twitter" aria-hidden="true"></i></a></li>
+        <li><a href="https://in.linkedin.com/in/nalexn" target="_blank"><i class="fa fa-linkedin"></i></a></li>
+        <li><a href="https://github.com/nalexn" target="_blank"><i class="fa fa-github"></i></a></li>
+        <li><a href="https://stackoverflow.com/users/2923345?tab=profile" target="_blank"><i class="fa fa-stack-overflow" aria-hidden="true"></i></a></li>
+        <li><a href="http://nalexn.github.io/feed.xml" target="_blank"><i class="fa fa-rss"></i></a></li>
+      </ul>
+    </section> <!-- End Section Contact -->
+    <div class="copyright">
+      <p>2020 &copy; Alexey Naumov</p>
+    </div>
+  </footer> <!-- End Footer -->
+</aside> <!-- End Sidebar -->
+<div class="content-box clearfix">
+  <article class="article-page">
+  <div class="page-content">
+    <div class="wrap-content">
+      <header class="header-page">
+        <h1 class="page-title">Programmatic navigation in SwiftUI project</h1>
+        <div class="page-date"><span>2019, Nov 08&nbsp;&nbsp;&nbsp;&nbsp;</span></div>
+      </header>
+      <div class="page-image"><img class="page-image" src=/assets/img/deep_link_swiftui_01.jpg alt="Programmatic navigation in SwiftUI project"></div>
+      <p>In this highly competitive market, developers do their best to achieve a compelling user experience in their mobile apps. This includes not only building amazing features available inside their apps, but also a native integration into the iOS system.</p>
+
+<p>Among these integrations there are few techniques that allow for launching the app with an instruction to display specific app page instead of the default landing screen:</p>
+
+<ul>
+  <li>Deep linking with <a href="https://developer.apple.com/ios/universal-links/">Universal Links</a> or <a href="https://developer.apple.com/documentation/uikit/inter-process_communication/allowing_apps_and_websites_to_link_to_your_content/defining_a_custom_url_scheme_for_your_app">Custom URL Scheme</a></li>
+  <li>Local and Remote <a href="https://developer.apple.com/documentation/usernotifications/">Notifications</a></li>
+  <li><a href="https://developer.apple.com/design/human-interface-guidelines/sirikit/overview/siri-shortcuts/">Siri Shortcuts</a></li>
+  <li><a href="https://developer.apple.com/ios/search/">Spotlight Search</a></li>
+  <li><a href="https://developer.apple.com/design/human-interface-guidelines/ios/extensions/home-screen-actions/">Home Screen Quick Actions</a></li>
+  <li><a href="https://developer.apple.com/handoff/">Handoff</a></li>
+</ul>
+
+<p>While you could easily find a tutorial for either of these features, there is one topic I found unconsidered yet:</p>
+
+<blockquote>
+  <p>Following the deep link instruction, how can we programmatically navigate to a custom content screen in a SwiftUI app?</p>
+</blockquote>
+
+<p>These were many ways to achieve this in UIKit (most of which were ugly), but SwiftUI brought in a completely new paradigm for building the UI with its own way for the screen navigation.</p>
+
+<p>A functional successor of <code class="language-plaintext highlighter-rouge">AppDelegate</code> in SwiftUI apps is <code class="language-plaintext highlighter-rouge">SceneDelegate</code>, which inherited these two methods for providing the app with the navigation instructions:</p>
+
+<div class="language-swift highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre></td><td class="rouge-code"><pre><span class="kd">func</span> <span class="nf">scene</span><span class="p">(</span><span class="n">_</span> <span class="nv">scene</span><span class="p">:</span> <span class="kt">UIScene</span><span class="p">,</span> <span class="k">continue</span> <span class="nv">userActivity</span><span class="p">:</span> <span class="kt">NSUserActivity</span><span class="p">)</span>
+    
+<span class="kd">func</span> <span class="nf">scene</span><span class="p">(</span><span class="n">_</span> <span class="nv">scene</span><span class="p">:</span> <span class="kt">UIScene</span><span class="p">,</span> <span class="n">openURLContexts</span> <span class="kt">URLContexts</span><span class="p">:</span> <span class="kt">Set</span><span class="o">&lt;</span><span class="kt">UIOpenURLContext</span><span class="o">&gt;</span><span class="p">)</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>The challenge here is to forward this instruction to the SwiftUI’s view hierarchy for displaying the right content.</p>
+
+<p>All we have by default is the <code class="language-plaintext highlighter-rouge">ContentView</code> created in the <code class="language-plaintext highlighter-rouge">scene(_:, willConnectTo:, options:)</code>, without a way to access the underlying views.</p>
+
+<p>The only way we can toggle what’s displayed is by changing the state bound to the views.</p>
+
+<p>There are two different types of state to which the <code class="language-plaintext highlighter-rouge">View</code> can be bound:</p>
+
+<ul>
+  <li>Local <code class="language-plaintext highlighter-rouge">@State</code> variable</li>
+  <li>Variable defined on an external <code class="language-plaintext highlighter-rouge">ObservableObject</code> (with or without <code class="language-plaintext highlighter-rouge">@Published</code> attribute)</li>
+</ul>
+
+<p>Let’s take a <code class="language-plaintext highlighter-rouge">TabView</code> (a replacement for <code class="language-plaintext highlighter-rouge">UITabBarController</code>) as the experiment subject and build a simple app that looks like this:</p>
+
+<p align="center"><img src="http://nalexn.github.io/assets/img/deep_link_swiftui_03.png" /></p>
+
+<p>The view-state binding for toggling the tabs can be built using <code class="language-plaintext highlighter-rouge">@State</code>:</p>
+
+<div class="language-swift highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+</pre></td><td class="rouge-code"><pre><span class="kd">struct</span> <span class="kt">ContentView</span><span class="p">:</span> <span class="kt">View</span> <span class="p">{</span>
+    
+    <span class="kd">@State</span> <span class="k">var</span> <span class="nv">selectedTab</span><span class="p">:</span> <span class="kt">Tab</span> <span class="o">=</span> <span class="o">.</span><span class="n">home</span>
+    
+    <span class="k">var</span> <span class="nv">body</span><span class="p">:</span> <span class="n">some</span> <span class="kt">View</span> <span class="p">{</span>
+        <span class="kt">TabView</span><span class="p">(</span><span class="nv">selection</span><span class="p">:</span> <span class="err">$</span><span class="n">selectedTab</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kt">Text</span><span class="p">(</span><span class="s">"Home Screen"</span><span class="p">)</span>
+                <span class="o">.</span><span class="n">tabItem</span> <span class="p">{</span> <span class="kt">Text</span><span class="p">(</span><span class="s">"Home"</span><span class="p">)</span> <span class="p">}</span>
+                <span class="o">.</span><span class="nf">tag</span><span class="p">(</span><span class="kt">Tab</span><span class="o">.</span><span class="n">home</span><span class="p">)</span>
+            <span class="kt">Text</span><span class="p">(</span><span class="s">"More Screen"</span><span class="p">)</span>
+                <span class="o">.</span><span class="n">tabItem</span> <span class="p">{</span> <span class="kt">Text</span><span class="p">(</span><span class="s">"More"</span><span class="p">)</span> <span class="p">}</span>
+                <span class="o">.</span><span class="nf">tag</span><span class="p">(</span><span class="kt">Tab</span><span class="o">.</span><span class="n">more</span><span class="p">)</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">extension</span> <span class="kt">ContentView</span> <span class="p">{</span>
+    <span class="kd">enum</span> <span class="kt">Tab</span><span class="p">:</span> <span class="kt">Hashable</span> <span class="p">{</span>
+        <span class="k">case</span> <span class="n">home</span>
+        <span class="k">case</span> <span class="n">more</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+<p>…and using <code class="language-plaintext highlighter-rouge">ObservableObject</code>:</p>
+
+<div class="language-swift highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+</pre></td><td class="rouge-code"><pre><span class="kd">struct</span> <span class="kt">ContentView</span><span class="p">:</span> <span class="kt">View</span> <span class="p">{</span>
+    
+    <span class="kd">@ObservedObject</span> <span class="k">var</span> <span class="nv">viewModel</span><span class="p">:</span> <span class="kt">ViewModel</span>
+    <span class="c1">// Alternatively:</span>
+    <span class="c1">// @EnvironmentObject var viewModel: ViewModel</span>
+    
+    <span class="k">var</span> <span class="nv">body</span><span class="p">:</span> <span class="n">some</span> <span class="kt">View</span> <span class="p">{</span>
+        <span class="kt">TabView</span><span class="p">(</span><span class="nv">selection</span><span class="p">:</span> <span class="err">$</span><span class="n">viewModel</span><span class="o">.</span><span class="n">selectedTab</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kt">Text</span><span class="p">(</span><span class="s">"First Screen"</span><span class="p">)</span>
+                <span class="o">.</span><span class="n">tabItem</span> <span class="p">{</span> <span class="kt">Text</span><span class="p">(</span><span class="s">"First"</span><span class="p">)</span> <span class="p">}</span>
+                <span class="o">.</span><span class="nf">tag</span><span class="p">(</span><span class="kt">Tab</span><span class="o">.</span><span class="n">home</span><span class="p">)</span>
+            <span class="kt">Text</span><span class="p">(</span><span class="s">"Second Screen"</span><span class="p">)</span>
+                <span class="o">.</span><span class="n">tabItem</span> <span class="p">{</span> <span class="kt">Text</span><span class="p">(</span><span class="s">"Second"</span><span class="p">)</span> <span class="p">}</span>
+                <span class="o">.</span><span class="nf">tag</span><span class="p">(</span><span class="kt">Tab</span><span class="o">.</span><span class="n">favorites</span><span class="p">)</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">extension</span> <span class="kt">ContentView</span> <span class="p">{</span>
+    <span class="kd">class</span> <span class="kt">ViewModel</span><span class="p">:</span> <span class="kt">ObservableObject</span> <span class="p">{</span>
+        <span class="k">var</span> <span class="nv">selectedTab</span><span class="p">:</span> <span class="kt">ContentView</span><span class="o">.</span><span class="kt">Tab</span> <span class="o">=</span> <span class="o">.</span><span class="n">home</span> <span class="p">{</span> 
+            <span class="k">willSet</span> <span class="p">{</span> <span class="n">objectWillChange</span><span class="o">.</span><span class="nf">send</span><span class="p">()</span> <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="c1">// Alternatively:</span>
+        <span class="c1">// @Published var selectedTab: ContentView.Tab = .home</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">extension</span> <span class="kt">CountriesList</span> <span class="p">{</span>
+    <span class="kd">enum</span> <span class="kt">Tab</span><span class="p">:</span> <span class="kt">Hashable</span> <span class="p">{</span>
+        <span class="k">case</span> <span class="n">home</span>
+        <span class="k">case</span> <span class="n">favorites</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+<p>When we type <code class="language-plaintext highlighter-rouge">$</code> before the variable name with the attribute <code class="language-plaintext highlighter-rouge">@State</code>, <code class="language-plaintext highlighter-rouge">@ObservedObject</code> or <code class="language-plaintext highlighter-rouge">@EnvironmentObject</code>, we retrieve a special entity of type <code class="language-plaintext highlighter-rouge">Binding</code>.</p>
+
+<p><code class="language-plaintext highlighter-rouge">Binding</code> is the <strong>access token</strong> you can pass around for providing direct read and write access to the value <strong>without granting ownership</strong> (in terms of retaining a reference type) or copying (for a value type).</p>
+
+<p>When the user selects a tab in the <code class="language-plaintext highlighter-rouge">TabView</code>, it unilaterally changes the value through <code class="language-plaintext highlighter-rouge">Binding</code> and assigns the associated <code class="language-plaintext highlighter-rouge">.tag(...)</code> to the <code class="language-plaintext highlighter-rouge">selectedTab</code> variable. This works the same way for both <code class="language-plaintext highlighter-rouge">@State</code> and <code class="language-plaintext highlighter-rouge">ObservableObject</code></p>
+
+<p>The programmer can also assign a value to that <code class="language-plaintext highlighter-rouge">selectedTab</code> variable at any time – and the <code class="language-plaintext highlighter-rouge">TabView</code> will toggle the displayed tab immediately.</p>
+
+<p><strong>This is the key to the programmatic navigation in SwiftUI.</strong></p>
+
+<p>Every view that toggles the displayed hierarchy, be that <code class="language-plaintext highlighter-rouge">TabView</code>, <code class="language-plaintext highlighter-rouge">NavigationView</code> or <code class="language-plaintext highlighter-rouge">.sheet()</code>, now uses <code class="language-plaintext highlighter-rouge">Binding</code> to control what’s displayed.</p>
+
+<p>So if we had access to the <code class="language-plaintext highlighter-rouge">Binding</code> (or factual underlying state) in the <code class="language-plaintext highlighter-rouge">SceneDelegate</code>, we would be able to tell the SwiftUI views to display the screen we want instead of the default one.</p>
+
+<p>There are two approaches to this problem.</p>
+
+<h1 id="1-storing-the-navigation-variables-in-the-centralized-appstate">1. Storing the navigation variables in the centralized AppState</h1>
+
+<p>The first approach implies creating a shared app state that is injected in the view hierarchy though <code class="language-plaintext highlighter-rouge">.environmentObject(...)</code> method on the root view:</p>
+
+<div class="language-swift highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+</pre></td><td class="rouge-code"><pre><span class="kd">class</span> <span class="kt">AppState</span><span class="p">:</span> <span class="kt">ObservableObject</span> <span class="p">{</span>
+    <span class="kd">@Published</span> <span class="k">var</span> <span class="nv">selectedTab</span><span class="p">:</span> <span class="kt">ContentView</span><span class="o">.</span><span class="kt">Tab</span> <span class="o">=</span> <span class="o">.</span><span class="n">home</span>
+    <span class="kd">@Published</span> <span class="k">var</span> <span class="nv">showActionSheet</span><span class="p">:</span> <span class="kt">Bool</span> <span class="o">=</span> <span class="kc">false</span>
+<span class="p">}</span>
+
+<span class="kd">class</span> <span class="kt">SceneDelegate</span><span class="p">:</span> <span class="kt">UIResponder</span><span class="p">,</span> <span class="kt">UIWindowSceneDelegate</span> <span class="p">{</span>
+
+    <span class="kd">lazy</span> <span class="k">var</span> <span class="nv">appState</span> <span class="o">=</span> <span class="kt">AppState</span><span class="p">()</span>
+
+    <span class="kd">func</span> <span class="nf">scene</span><span class="p">(</span><span class="n">_</span> <span class="nv">scene</span><span class="p">:</span> <span class="kt">UIScene</span><span class="p">,</span> <span class="n">willConnectTo</span> <span class="nv">session</span><span class="p">:</span> <span class="kt">UISceneSession</span><span class="p">,</span> 
+               <span class="n">options</span> <span class="nv">connectionOptions</span><span class="p">:</span> <span class="kt">UIScene</span><span class="o">.</span><span class="kt">ConnectionOptions</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">let</span> <span class="nv">contentView</span> <span class="o">=</span> <span class="kt">ContentView</span><span class="p">()</span>
+            <span class="o">.</span><span class="nf">environmentObject</span><span class="p">(</span><span class="n">appState</span><span class="p">)</span>
+        <span class="o">...</span>
+    <span class="p">}</span>
+    
+    <span class="kd">func</span> <span class="nf">scene</span><span class="p">(</span><span class="n">_</span> <span class="nv">scene</span><span class="p">:</span> <span class="kt">UIScene</span><span class="p">,</span> <span class="n">openURLContexts</span> <span class="kt">URLContexts</span><span class="p">:</span> <span class="kt">Set</span><span class="o">&lt;</span><span class="kt">UIOpenURLContext</span><span class="o">&gt;</span><span class="p">)</span> <span class="p">{</span>
+        <span class="c1">// Parse the deep link</span>
+        <span class="k">if</span> <span class="cm">/*Deep link leads to the More tab*/</span> <span class="p">{</span>
+            <span class="n">appState</span><span class="o">.</span><span class="n">selectedTab</span> <span class="o">=</span> <span class="o">.</span><span class="n">more</span>
+            <span class="n">appState</span><span class="o">.</span><span class="n">showActionSheet</span> <span class="o">=</span> <span class="kc">true</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">struct</span> <span class="kt">ContentView</span><span class="p">:</span> <span class="kt">View</span> <span class="p">{</span>
+    
+    <span class="kd">@EnvironmentObject</span> <span class="k">var</span> <span class="nv">appState</span><span class="p">:</span> <span class="kt">AppState</span>
+    
+    <span class="k">var</span> <span class="nv">body</span><span class="p">:</span> <span class="n">some</span> <span class="kt">View</span> <span class="p">{</span>
+        <span class="kt">TabView</span><span class="p">(</span><span class="nv">selection</span><span class="p">:</span> <span class="err">$</span><span class="n">appState</span><span class="o">.</span><span class="n">selectedTab</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kt">MoreTabView</span><span class="p">()</span><span class="o">.</span><span class="nf">tag</span><span class="p">(</span><span class="kt">ContentView</span><span class="o">.</span><span class="kt">Tab</span><span class="o">.</span><span class="n">more</span><span class="p">)</span>
+            <span class="o">...</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">struct</span> <span class="kt">MoreTabView</span><span class="p">:</span> <span class="kt">View</span> <span class="p">{</span>
+    
+    <span class="kd">@EnvironmentObject</span> <span class="k">var</span> <span class="nv">appState</span><span class="p">:</span> <span class="kt">AppState</span>
+    
+    <span class="k">var</span> <span class="nv">body</span><span class="p">:</span> <span class="n">some</span> <span class="kt">View</span> <span class="p">{</span>
+        <span class="kt">Text</span><span class="p">(</span><span class="s">"More Tab"</span><span class="p">)</span>
+        <span class="o">.</span><span class="nf">actionSheet</span><span class="p">(</span><span class="nv">isPresented</span><span class="p">:</span> <span class="err">$</span><span class="n">appState</span><span class="o">.</span><span class="n">showActionSheet</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kt">ActionSheet</span><span class="p">(</span><span class="nv">title</span><span class="p">:</span> <span class="o">...</span><span class="p">)</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<h1 id="2-broadcasting-navigation-parameters-through-external-publisher">2. Broadcasting navigation parameters through external Publisher</h1>
+
+<p>The second approach is to use a <code class="language-plaintext highlighter-rouge">Publisher</code> from Combine to deliver the navigation state updates:</p>
+
+<div class="language-swift highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+</pre></td><td class="rouge-code"><pre><span class="kd">struct</span> <span class="kt">NavigationCoordinator</span><span class="p">:</span> <span class="kt">EnvironmentKey</span> <span class="p">{</span>
+    <span class="k">let</span> <span class="nv">selectedTab</span> <span class="o">=</span> <span class="kt">PassthroughSubject</span><span class="o">&lt;</span><span class="kt">ContentView</span><span class="o">.</span><span class="kt">Tab</span><span class="p">,</span> <span class="kt">Never</span><span class="o">&gt;</span><span class="p">()</span>
+    <span class="k">let</span> <span class="nv">showActionSheet</span> <span class="o">=</span> <span class="kt">PassthroughSubject</span><span class="o">&lt;</span><span class="kt">Bool</span><span class="p">,</span> <span class="kt">Never</span><span class="o">&gt;</span><span class="p">()</span>
+<span class="p">}</span>
+
+<span class="kd">class</span> <span class="kt">SceneDelegate</span><span class="p">:</span> <span class="kt">UIResponder</span><span class="p">,</span> <span class="kt">UIWindowSceneDelegate</span> <span class="p">{</span>
+
+    <span class="kd">lazy</span> <span class="k">var</span> <span class="nv">navigation</span> <span class="o">=</span> <span class="kt">NavigationCoordinator</span><span class="p">()</span>
+
+    <span class="kd">func</span> <span class="nf">scene</span><span class="p">(</span><span class="n">_</span> <span class="nv">scene</span><span class="p">:</span> <span class="kt">UIScene</span><span class="p">,</span> <span class="n">willConnectTo</span> <span class="nv">session</span><span class="p">:</span> <span class="kt">UISceneSession</span><span class="p">,</span>
+               <span class="n">options</span> <span class="nv">connectionOptions</span><span class="p">:</span> <span class="kt">UIScene</span><span class="o">.</span><span class="kt">ConnectionOptions</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">let</span> <span class="nv">contentView</span> <span class="o">=</span> <span class="kt">ContentView</span><span class="p">()</span>
+            <span class="o">.</span><span class="nf">environment</span><span class="p">(\</span><span class="o">.</span><span class="n">navigationCoordinator</span><span class="p">,</span> <span class="n">navigation</span><span class="p">)</span>
+        <span class="o">...</span>
+    <span class="p">}</span>
+    
+    <span class="kd">func</span> <span class="nf">scene</span><span class="p">(</span><span class="n">_</span> <span class="nv">scene</span><span class="p">:</span> <span class="kt">UIScene</span><span class="p">,</span> <span class="n">openURLContexts</span> <span class="kt">URLContexts</span><span class="p">:</span> <span class="kt">Set</span><span class="o">&lt;</span><span class="kt">UIOpenURLContext</span><span class="o">&gt;</span><span class="p">)</span> <span class="p">{</span>
+        <span class="c1">// Parse the deep link</span>
+        <span class="k">if</span> <span class="cm">/*Deep link leads to the More tab*/</span> <span class="p">{</span>
+            <span class="n">navigation</span><span class="o">.</span><span class="n">selectedTab</span><span class="o">.</span><span class="nf">send</span><span class="p">(</span><span class="o">.</span><span class="n">more</span><span class="p">)</span>
+            <span class="n">navigation</span><span class="o">.</span><span class="n">showActionSheet</span><span class="o">.</span><span class="nf">send</span><span class="p">(</span><span class="kc">true</span><span class="p">)</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">struct</span> <span class="kt">ContentView</span><span class="p">:</span> <span class="kt">View</span> <span class="p">{</span>
+    
+    <span class="kd">@Environment</span><span class="p">(\</span><span class="o">.</span><span class="n">navigationCoordinator</span><span class="p">)</span> <span class="k">var</span> <span class="nv">navigation</span><span class="p">:</span> <span class="kt">NavigationCoordinator</span>
+    <span class="kd">@State</span> <span class="k">var</span> <span class="nv">selectedTab</span><span class="p">:</span> <span class="kt">Tab</span> <span class="o">=</span> <span class="o">.</span><span class="n">home</span>
+    
+    <span class="k">var</span> <span class="nv">body</span><span class="p">:</span> <span class="n">some</span> <span class="kt">View</span> <span class="p">{</span>
+        <span class="kt">TabView</span><span class="p">(</span><span class="nv">selection</span><span class="p">:</span> <span class="err">$</span><span class="n">selectedTab</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kt">MoreTabView</span><span class="p">()</span><span class="o">.</span><span class="nf">tag</span><span class="p">(</span><span class="kt">ContentView</span><span class="o">.</span><span class="kt">Tab</span><span class="o">.</span><span class="n">more</span><span class="p">)</span>
+            <span class="o">...</span>
+        <span class="p">}</span>
+        <span class="o">.</span><span class="nf">onReceive</span><span class="p">(</span><span class="n">navigation</span><span class="o">.</span><span class="n">selectedTab</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">self</span><span class="o">.</span><span class="n">selectedTab</span> <span class="o">=</span> <span class="nv">$0</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">struct</span> <span class="kt">MoreTabView</span><span class="p">:</span> <span class="kt">View</span> <span class="p">{</span>
+    
+    <span class="kd">@Environment</span><span class="p">(\</span><span class="o">.</span><span class="n">navigationCoordinator</span><span class="p">)</span> <span class="k">var</span> <span class="nv">navigation</span><span class="p">:</span> <span class="kt">NavigationCoordinator</span>
+    <span class="kd">@State</span> <span class="k">var</span> <span class="nv">showActionSheet</span><span class="p">:</span> <span class="kt">Bool</span> <span class="o">=</span> <span class="kc">false</span>
+    
+    <span class="k">var</span> <span class="nv">body</span><span class="p">:</span> <span class="n">some</span> <span class="kt">View</span> <span class="p">{</span>
+        <span class="kt">Text</span><span class="p">(</span><span class="s">"More Tab"</span><span class="p">)</span>
+        <span class="o">.</span><span class="nf">actionSheet</span><span class="p">(</span><span class="nv">isPresented</span><span class="p">:</span> <span class="err">$</span><span class="n">showActionSheet</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kt">ActionSheet</span><span class="p">(</span><span class="nv">title</span><span class="p">:</span> <span class="o">...</span><span class="p">)</span>
+        <span class="p">}</span>
+        <span class="o">.</span><span class="nf">onReceive</span><span class="p">(</span><span class="n">navigation</span><span class="o">.</span><span class="n">showActionSheet</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">self</span><span class="o">.</span><span class="n">showActionSheet</span> <span class="o">=</span> <span class="nv">$0</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>This is really up to you which method to use, but there are conceptual differences.</p>
+
+<p>The first approach assures that the selected navigation parameters remain selected even if the content view cannot pick it up yet. Some view along the way may be showing a loading indicator, but once it finishes and presents the final child view hierarchy, one of the children can eventually pick up the navigation parameter and behave accordingly.</p>
+
+<p>This simply won’t work with the second approach, unless you change <code class="language-plaintext highlighter-rouge">PassthroughSubject</code> to <code class="language-plaintext highlighter-rouge">CurrentValueSubject</code> to always hold the navigation state. But in this case, you’d need to reset the value manually once the navigation is complete.</p>
+
+<p>You don’t need to reset the navigation state for the first approach, because App State, holing the navigation parameters, is the single source of truth for the entire program and SwiftUI will be updating those values as the user continues navigating in the app.</p>
+
+<h1 id="navigation-through-multiple-views">Navigation through multiple views</h1>
+
+<p>Using one of the approaches described above you can programmatically navigate to a screen at any depth.</p>
+
+<p>The only requirement: for every “navigatable” view along the way to the deep link’s target view, you need to allocate a separate navigation parameter in the AppState or in the broadcasted message.</p>
+
+<p>Then, inside the <code class="language-plaintext highlighter-rouge">scene(_ scene, openURLContexts:)</code> you need to toggle all the navigation parameters at once, and SwiftUI view hierarchy will transition to the target screen at one step.</p>
+
+<h1 id="list-doesnt-correctly-support-programmatic-navigation"><code class="language-plaintext highlighter-rouge">List</code> doesn’t correctly support programmatic navigation</h1>
+
+<p>While I was implementing deep links in the <a href="https://github.com/nalexn/clean-architecture-swiftui">sample project</a>, I found a hidden pitfall with programmatic navigation through <code class="language-plaintext highlighter-rouge">List</code></p>
+
+<p>Consider this simple setup:</p>
+
+<div class="language-swift highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+</pre></td><td class="rouge-code"><pre><span class="kd">struct</span> <span class="kt">Item</span><span class="p">:</span> <span class="kt">Identifiable</span> <span class="p">{</span>
+    <span class="k">let</span> <span class="nv">id</span><span class="p">:</span> <span class="kt">String</span>
+    <span class="k">let</span> <span class="nv">name</span><span class="p">:</span> <span class="kt">String</span>
+<span class="p">}</span>
+
+<span class="kd">struct</span> <span class="kt">ContentView</span><span class="p">:</span> <span class="kt">View</span> <span class="p">{</span>
+    
+    <span class="kd">@State</span> <span class="k">var</span> <span class="nv">items</span><span class="p">:</span> <span class="p">[</span><span class="kt">Item</span><span class="p">]</span> <span class="o">=</span> <span class="cm">/*An array of 100 items*/</span>
+    <span class="kd">@EnvironmentObject</span> <span class="k">var</span> <span class="nv">appState</span><span class="p">:</span> <span class="kt">AppState</span>
+    
+    <span class="k">var</span> <span class="nv">body</span><span class="p">:</span> <span class="n">some</span> <span class="kt">View</span> <span class="p">{</span>
+        <span class="kt">NavigationView</span> <span class="p">{</span>
+            <span class="kt">List</span><span class="p">(</span><span class="n">items</span><span class="p">)</span> <span class="p">{</span> <span class="n">item</span> <span class="k">in</span>
+	            <span class="kt">NavigationLink</span><span class="p">(</span>
+	                <span class="nv">destination</span><span class="p">:</span> <span class="kt">ItemDetailsView</span><span class="p">(</span><span class="nv">item</span><span class="p">:</span> <span class="n">item</span><span class="p">),</span>
+	                <span class="nv">tag</span><span class="p">:</span> <span class="n">item</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
+	                <span class="nv">selection</span><span class="p">:</span> <span class="k">self</span><span class="o">.</span><span class="err">$</span><span class="n">appState</span><span class="o">.</span><span class="n">selectedItemId</span><span class="p">)</span> <span class="p">{</span>
+	                    <span class="kt">Text</span><span class="p">(</span><span class="n">item</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+	                <span class="p">}</span>
+	        <span class="p">}</span>
+            <span class="o">.</span><span class="nf">navigationBarTitle</span><span class="p">(</span><span class="s">"Items"</span><span class="p">)</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>The app simply shows a list of 100 text items. Let’s suppose, we implemented a deep link that opens <code class="language-plaintext highlighter-rouge">ItemDetailsView</code> for item with specified <code class="language-plaintext highlighter-rouge">id</code>. We try it with the URL like so:</p>
+
+<blockquote>
+  <p>https://www.100items.com/details?id=5</p>
+</blockquote>
+
+<p>.. and it works. The app launches and parses the URL to assign <code class="language-plaintext highlighter-rouge">5</code> to the <code class="language-plaintext highlighter-rouge">appState.selectedItemId</code> and immediately shows <code class="language-plaintext highlighter-rouge">ItemDetailsView</code> pushed on top of the <code class="language-plaintext highlighter-rouge">List</code>.</p>
+
+<p>So far so good. But once you try another <code class="language-plaintext highlighter-rouge">id</code>, say <code class="language-plaintext highlighter-rouge">75</code>:</p>
+
+<blockquote>
+  <p>https://www.100items.com/details?id=75</p>
+</blockquote>
+
+<p>The code works just the same way, but the <code class="language-plaintext highlighter-rouge">List</code> doesn’t push the <code class="language-plaintext highlighter-rouge">ItemDetailsView</code>.</p>
+
+<p>What is going on? We know the item with id 75 exists in the list, but for some reason, the details screen is not get pushed.</p>
+
+<p>It turns out that the List’s item we’re pushing to <strong>has to be currently visible</strong> in the <code class="language-plaintext highlighter-rouge">List</code> in order for the programmatic navigation to work.</p>
+
+<p>Once you scroll the list to make the target item visible, you’ll see an unappealing effect: the scrolling suddenly stops and details view appears without animation on the navigation stack:</p>
+
+<p align="center"><img style="border:1px solid #C2C0C0;" src="http://nalexn.github.io/assets/img/deep_link_swiftui_04.gif" /></p>
+
+<p><code class="language-plaintext highlighter-rouge">List</code> is optimized the same way <code class="language-plaintext highlighter-rouge">UITableView</code> was, so it tracks the displayed items and <strong>lazily</strong> loads the content as needed.</p>
+
+<p>Because of this, the <code class="language-plaintext highlighter-rouge">List</code> is unaware of the Item with <code class="language-plaintext highlighter-rouge">id=75</code> and so it does nothing until it gets to know it is actually in the array.</p>
+
+<p>This bug could be fixed if we had access to the scroll offset of the <code class="language-plaintext highlighter-rouge">List</code> to adjust it for this edge case, but we cannot: there is no API to change the offset of the <code class="language-plaintext highlighter-rouge">List</code>.</p>
+
+<p>A hotfix to this issue I see right now is moving the target item to the first position in the array so the <code class="language-plaintext highlighter-rouge">List</code> could pick up the <code class="language-plaintext highlighter-rouge">NavigationLink</code> correctly. Or we could simply not rely on programmatic navigation through the <code class="language-plaintext highlighter-rouge">List</code></p>
+
+<p>The sample project that supports deep links can be <a href="https://github.com/nalexn/clean-architecture-swiftui">found on Github</a>. It was initially created for illustration of the article <a href="http://nalexn.github.io/clean-architecture-swiftui/">Clean Architecture for SwiftUI</a>, I recommend you to check it out as well.</p>
+
+      <h2>Your appreciation is my inspiration!</h2>
+      <p>I have tons of unpublished kick-ass materials and ideas, but I need your help! Consider sharing this article on <a href="https://twitter.com/share?url=http://nalexn.github.io/swiftui-deep-linking/?utm_source=share_tw&amp;text=Programmatic navigation in SwiftUI project&amp;hashtags=iosdev&amp;via=nallexn" title="Twitter" target="_blank" onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=500');return false;"><i class="fa fa-twitter share-button"></i></a>, <a href="https://www.facebook.com/sharer/sharer.php?u=http://nalexn.github.io/swiftui-deep-linking/?utm_source=share_fb&amp;display=popup&amp;quote=Programmatic navigation in SwiftUI project&amp;hashtag=#iosdev" title="Facebook" target="_blank" onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=500');return false;"><i class="fa fa-facebook-f share-button"></i></a> or <a href="https://www.linkedin.com/sharing/share-offsite/?url=http://nalexn.github.io/swiftui-deep-linking/?utm_source=share_in" title="LinkedIn" target="_blank" onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=500');return false;"><i class="fa fa-linkedin share-button"></i></a>. This tiny action helps to grow this blog and inspires me to post more! (Or if you are nuts, <a href="https://venmo.com/nallexn" target="_blank">Venmo</a> me a drink!)</p>
+      </p>
+      <p>You can subscribe to <a href="http://nalexn.github.io/feed.xml" target="_blank">RSS feed</a> or follow my <a href="https://twitter.com/nallexn" target="_blank">Twitter</a> for the new articles alerts.
+
+      <div style="width:0px; height:30px; display: block;"></div>
+      <h2>Most recent articles</h2>
+      <div class="content-box recent clearfix" style="padding: 20px 10px;">
+        
+        
+          
+          <article class="post">
+            
+              <a class="post-thumbnail" style="background-image: url(/assets/img/layers_001.jpg)" href="/separation-of-concerns/"></a>
+            
+            <div class="post-content">
+              <h2 class="post-title"><a href="/separation-of-concerns/">Separation of Concerns in Software Design</a></h2>
+              <p></p>
+              <span class="post-date">2020, Jan 16&nbsp;&nbsp;&nbsp;—&nbsp;</span>
+              <span class="post-words">10 minute read</span>
+            </div>
+          </article>
+          
+        
+          
+          <article class="post">
+            
+              <a class="post-thumbnail" style="background-image: url(/assets/img/observable_001.jpg)" href="/swiftui-observableobject/"></a>
+            
+            <div class="post-content">
+              <h2 class="post-title"><a href="/swiftui-observableobject/">Why I quit using the ObservableObject</a></h2>
+              <p></p>
+              <span class="post-date">2019, Dec 20&nbsp;&nbsp;&nbsp;—&nbsp;</span>
+              <span class="post-words">7 minute read</span>
+            </div>
+          </article>
+          
+        
+          
+          <article class="post">
+            
+              <a class="post-thumbnail" style="background-image: url(/assets/img/comparison_01.jpg)" href="/anyview-vs-group/"></a>
+            
+            <div class="post-content">
+              <h2 class="post-title"><a href="/anyview-vs-group/">Performance Battle: AnyView vs Group</a></h2>
+              <p></p>
+              <span class="post-date">2019, Dec 05&nbsp;&nbsp;&nbsp;—&nbsp;</span>
+              <span class="post-words">9 minute read</span>
+            </div>
+          </article>
+          
+        
+          
+          <article class="post">
+            
+              <a class="post-thumbnail" style="background-image: url(/assets/img/swiftui_unit_testing_01.jpg)" href="/swiftui-unit-testing/"></a>
+            
+            <div class="post-content">
+              <h2 class="post-title"><a href="/swiftui-unit-testing/">Who said we cannot unit test SwiftUI views?</a></h2>
+              <p></p>
+              <span class="post-date">2019, Nov 21&nbsp;&nbsp;&nbsp;—&nbsp;</span>
+              <span class="post-words">12 minute read</span>
+            </div>
+          </article>
+          
+        
+          
+        
+        <article class="post">
+          <a class="post-thumbnail" style="background-image: url(/assets/img/launch_001.jpg)" href="/"></a>
+          <div class="post-content">
+            <h2 class="post-title"><a href="/">Browse All Articles</a></h2>
+            <p></p>
+            <span class="post-date">Top iOS programming stuff, no kidding!</span>
+          </div>
+        </article>
+      </div>
+    </div> <!-- End Wrap Content -->
+  </div> <!-- End Page Content -->
+</article> <!-- End Article Page -->
+
+</div>
+
+  </div>
+</body>
+</html>

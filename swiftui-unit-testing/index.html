@@ -1,0 +1,807 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-96224610-1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'UA-96224610-1');
+  </script>
+	<meta charset="utf-8">
+	<title>Who said we cannot unit test SwiftUI views? - Alexey Naumov</title>
+
+  <!-- Edit site and author settings in `_config.yml` to make the social details your own -->
+
+    <meta content="Alexey Naumov" property="og:site_name">
+  
+    <meta content="Who said we cannot unit test SwiftUI views?" property="og:title">
+  
+  
+    <meta content="article" property="og:type">
+  
+  
+    <meta content="The story behind creating a Unit Testing framework" property="og:description">
+  
+  
+    <meta content="http://nalexn.github.io/swiftui-unit-testing/" property="og:url">
+  
+  
+    <meta content="2019-11-21T08:30:00+03:00" property="article:published_time">
+    <meta content="http://nalexn.github.io/about/" property="article:author">
+  
+  
+    <meta content="http://nalexn.github.io/assets/img/swiftui_unit_testing_01.jpg" property="og:image">
+  
+  
+    
+  
+  
+    <meta name="keywords" content="iOS, swift, test, xcode, exception, traverse, instance, variable, subview, child, view">
+    
+    <meta content="iOS" property="article:tag">
+    
+    <meta content="swift" property="article:tag">
+    
+    <meta content="test" property="article:tag">
+    
+    <meta content="xcode" property="article:tag">
+    
+    <meta content="exception" property="article:tag">
+    
+    <meta content="traverse" property="article:tag">
+    
+    <meta content="instance" property="article:tag">
+    
+    <meta content="variable" property="article:tag">
+    
+    <meta content="subview" property="article:tag">
+    
+    <meta content="child" property="article:tag">
+    
+    <meta content="view" property="article:tag">
+    
+  
+
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:site" content="@">
+    <meta name="twitter:creator" content="@nallexn">
+  
+    <meta name="twitter:title" content="Who said we cannot unit test SwiftUI views?">
+  
+  
+    <meta name="twitter:url" content="http://nalexn.github.io/swiftui-unit-testing/">
+  
+  
+    <meta name="twitter:description" content="The story behind creating a Unit Testing framework">
+  
+
+	<meta name="description" content="The story behind creating a Unit Testing framework">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+	<meta property="og:image" content="">
+  <link rel="icon" sizes="16x16" href="/assets/img/favicon/favicon.ico">
+  <link rel="icon" sizes="32x32" href="/assets/img/favicon/favicon-32.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="/assets/img/favicon/favicon-114.png">
+	<!-- Chrome, Firefox OS and Opera -->
+	<meta name="theme-color" content="#263959">
+	<!-- Windows Phone -->
+	<meta name="msapplication-navbutton-color" content="#263959">
+	<!-- iOS Safari -->
+	<meta name="apple-mobile-web-app-status-bar-style" content="#263959">
+	<!-- Google Fonts -->
+	<link href="https://fonts.googleapis.com/css?family=PT+Serif:400,700" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css?family=Lato:300,400,700" rel="stylesheet">
+	<!-- Font Awesome -->
+	<link rel="stylesheet" href="/assets/fonts/font-awesome/css/font-awesome.min.css">
+	<!-- Styles -->
+	<link rel="stylesheet" href="/assets/css/main.css?v=2">
+</head>
+
+<body>
+  <div class="wrapper">
+    <aside class="sidebar">
+  <header>
+    <div class="about">
+      <div class="author-logo">
+      <span class="hover-message">Let's connect on LinkedIn!</span>
+      <div class="cover-author-image">
+        <a href="https://in.linkedin.com/in/nalexn" target="_blank"><img src="/assets/img/profile-image.jpg" alt="Alexey Naumov"></a>
+      </div>
+      </div>
+      <div class="author-name">Alexey Naumov</div>
+      <a href="/"><img src="/assets/img/content_00.png" alt="" style="-webkit-border-radius: 0%; border-radius: 0%;"></a>
+    </div>
+  </header> <!-- End Header -->
+  <footer>
+    <section class="contact">
+      <h3 class="contact-title">Links</h3>
+      <ul>
+        <li><a href="https://twitter.com/nallexn" target="_blank"><i class="fa fa-twitter" aria-hidden="true"></i></a></li>
+        <li><a href="https://in.linkedin.com/in/nalexn" target="_blank"><i class="fa fa-linkedin"></i></a></li>
+        <li><a href="https://github.com/nalexn" target="_blank"><i class="fa fa-github"></i></a></li>
+        <li><a href="https://stackoverflow.com/users/2923345?tab=profile" target="_blank"><i class="fa fa-stack-overflow" aria-hidden="true"></i></a></li>
+        <li><a href="http://nalexn.github.io/feed.xml" target="_blank"><i class="fa fa-rss"></i></a></li>
+      </ul>
+    </section> <!-- End Section Contact -->
+    <div class="copyright">
+      <p>2020 &copy; Alexey Naumov</p>
+    </div>
+  </footer> <!-- End Footer -->
+</aside> <!-- End Sidebar -->
+<div class="content-box clearfix">
+  <article class="article-page">
+  <div class="page-content">
+    <div class="wrap-content">
+      <header class="header-page">
+        <h1 class="page-title">Who said we cannot unit test SwiftUI views?</h1>
+        <div class="page-date"><span>2019, Nov 21&nbsp;&nbsp;&nbsp;&nbsp;</span></div>
+      </header>
+      <div class="page-image"><img class="page-image" src=/assets/img/swiftui_unit_testing_01.jpg alt="Who said we cannot unit test SwiftUI views?"></div>
+      <p>Viktor Chernomyrdin, a Russian politician from the ‘90s, once said:</p>
+
+<blockquote>
+  <p>Such has never happened before, and here it is again…</p>
+</blockquote>
+
+<p>This reminds me of the situation we find ourselves in with SwiftUI: We have a brand-new, exciting technology — but with stability issues, an incomplete API, and scarce documentation. <em>Such has never happened before, and here it is again</em>.</p>
+
+<p>Anyway, things are not as bad as they could be, and teams have already started adopting SwiftUI in production projects. Still, one of the main arguments against using it in production is a complete inability to unit test the UI.</p>
+
+<div style="max-width:600px; display: block; margin-left: auto; margin-right: auto;"><img src="http://nalexn.github.io/assets/img/clean_swiftui_02.jpg" /></div>
+
+<p>A function of state should be really straightforward to test — with one <strong>if</strong>. We need to have access to the function’s output.</p>
+
+<p>Views in SwiftUI are nested inside one another, forming a statically typed hierarchy of structs without an API to inspect the view’s content.</p>
+
+<p>One day Apple may release its unit testing tool for SwiftUI, but who knows whether/when this will happen.</p>
+
+<p>So I decided to build one.</p>
+
+<hr />
+
+<p>Since there is no access to the inner <a href="https://worthdoingbadly.com/swiftui-html/">shadow Attribute Graph</a> of SwiftUI, I tried to use Swift’s reflection API. Xcode uses it for printing out the contents of variables when we stop on a breakpoint in the debugger. And I was surprised how much information was available inside SwiftUI views…</p>
+
+<p>It turns out SwiftUI views have very ramified inner structure, so the first thing I had to implement was a recursive traversing of inner attributes:</p>
+
+<div class="language-swift highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+</pre></td><td class="rouge-code"><pre><span class="kd">static</span> <span class="kd">func</span> <span class="nf">attributesTree</span><span class="p">(</span><span class="nv">value</span><span class="p">:</span> <span class="kt">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">[</span><span class="kt">String</span><span class="p">:</span> <span class="kt">Any</span><span class="p">]</span> <span class="p">{</span>
+    <span class="k">let</span> <span class="nv">mirror</span> <span class="o">=</span> <span class="kt">Mirror</span><span class="p">(</span><span class="nv">reflecting</span><span class="p">:</span> <span class="n">value</span><span class="p">)</span>
+    <span class="k">let</span> <span class="nv">attributes</span><span class="p">:</span> <span class="p">[</span><span class="kt">Any</span><span class="p">]</span> <span class="o">=</span> <span class="n">mirror</span><span class="o">.</span><span class="n">children</span><span class="o">.</span><span class="n">compactMap</span> <span class="p">{</span> <span class="n">attribute</span> <span class="o">-&gt;</span> <span class="p">[</span><span class="kt">String</span><span class="p">:</span> <span class="kt">Any</span><span class="p">]?</span> <span class="k">in</span>
+        <span class="k">guard</span> <span class="k">let</span> <span class="nv">name</span> <span class="o">=</span> <span class="n">attribute</span><span class="o">.</span><span class="n">label</span> <span class="k">else</span> <span class="p">{</span> <span class="k">return</span> <span class="kc">nil</span> <span class="p">}</span>
+        <span class="k">return</span> <span class="p">[</span><span class="nv">name</span><span class="p">:</span> <span class="nf">attributesTree</span><span class="p">(</span><span class="nv">value</span><span class="p">:</span> <span class="n">attribute</span><span class="o">.</span><span class="n">value</span><span class="p">)]</span>
+    <span class="p">}</span>
+    <span class="k">let</span> <span class="nv">description</span><span class="p">:</span> <span class="kt">Any</span> <span class="o">=</span> <span class="n">attributes</span><span class="o">.</span><span class="n">count</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="p">?</span> <span class="nv">attributes</span> <span class="p">:</span> <span class="kt">String</span><span class="p">(</span><span class="nv">describing</span><span class="p">:</span> <span class="n">value</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">[</span><span class="s">"</span><span class="se">\(</span><span class="nf">type</span><span class="p">(</span><span class="nv">of</span><span class="p">:</span> <span class="n">value</span><span class="p">)</span><span class="se">)</span><span class="s">"</span><span class="p">:</span> <span class="n">description</span><span class="p">]</span>
+<span class="p">}</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>If you call this function for a simple view hierarchy like this one:</p>
+
+<div class="language-swift highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+</pre></td><td class="rouge-code"><pre><span class="k">let</span> <span class="nv">text</span> <span class="o">=</span> <span class="s">"Hello, world!"</span>
+<span class="k">let</span> <span class="nv">view</span> <span class="o">=</span> <span class="kt">AnyView</span><span class="p">(</span><span class="kt">Text</span><span class="p">(</span><span class="n">text</span><span class="p">))</span>
+<span class="k">let</span> <span class="nv">tree</span> <span class="o">=</span> <span class="nf">attributesTree</span><span class="p">(</span><span class="nv">value</span><span class="p">:</span> <span class="n">view</span><span class="p">)</span>
+<span class="nf">dump</span><span class="p">(</span><span class="n">tree</span><span class="p">)</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>…you would get a pretty long output, which, however, could be restructured it in a more readable and concise way:</p>
+
+<div class="language-swift highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+</pre></td><td class="rouge-code"><pre><span class="s">"view"</span> <span class="n">of</span> <span class="n">type</span> <span class="kt">AnyView</span>
+  <span class="err">↳</span> <span class="s">"storage"</span> <span class="n">of</span> <span class="n">type</span> <span class="kt">AnyViewStorage</span><span class="o">&lt;</span><span class="kt">Text</span><span class="o">&gt;</span>
+      <span class="err">↳</span> <span class="s">"view"</span> <span class="n">of</span> <span class="n">type</span> <span class="kt">Text</span>
+          <span class="err">↳</span> <span class="s">"modifiers"</span> <span class="n">of</span> <span class="n">type</span> <span class="kt">Array</span><span class="o">&lt;</span><span class="kt">Modifier</span><span class="o">&gt;</span>
+              <span class="err">↳</span> <span class="n">value</span> <span class="o">=</span> <span class="p">[]</span>
+          <span class="err">↳</span> <span class="s">"storage"</span> <span class="n">of</span> <span class="n">type</span> <span class="kt">Storage</span>
+              <span class="err">↳</span> <span class="s">"verbatim"</span> <span class="n">of</span> <span class="n">type</span> <span class="kt">String</span>
+                  <span class="err">↳</span> <span class="n">value</span> <span class="o">=</span> <span class="s">"Hello, world!"</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>I had a gut feeling it just cannot be that simple, there had to be a wall that I won’t be able to get through with using just reflection, but I was curious how far I can dig.</p>
+
+<p>And as it turned out, there were many pitfalls waiting for me on the way:</p>
+
+<ol>
+  <li>All types in reflection are erased to <code class="language-plaintext highlighter-rouge">Any</code></li>
+  <li>Computed properties, such as <code class="language-plaintext highlighter-rouge">var body: some View</code>, are not available in reflection</li>
+  <li>Generic private structs and function types which are tricky to cast the value to</li>
+  <li>Initializing a struct which all <code class="language-plaintext highlighter-rouge">init</code> methods are private</li>
+  <li>SwiftUI dependency injection through <code class="language-plaintext highlighter-rouge">Environment</code></li>
+  <li>Significant variations of the hierarchy after a tiny tweak of the input. For example, <code class="language-plaintext highlighter-rouge">Text("Hi")</code> vs <code class="language-plaintext highlighter-rouge">Text(hiValue)</code></li>
+  <li>Overall obscurity and lack of information about the private structures</li>
+</ol>
+
+<p>In this article, I’ll talk about interesting use cases I encountered and the ways I addressed the challenges, but before that, let me show you what I’ve got after a few days of trial and error: <a href="https://github.com/nalexn/ViewInspector">ViewInspector on GitHub</a></p>
+
+<p>With this library you can extract your custom views from the hierarchy and evaluate its state in unit tests:</p>
+
+<div class="language-swift highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre></td><td class="rouge-code"><pre><span class="k">let</span> <span class="nv">customView</span> <span class="o">=</span> <span class="k">try</span> <span class="n">view</span><span class="o">.</span><span class="nf">inspect</span><span class="p">()</span><span class="o">.</span><span class="nf">anyView</span><span class="p">()</span><span class="o">.</span><span class="nf">hStack</span><span class="p">()</span><span class="o">.</span><span class="nf">view</span><span class="p">(</span><span class="kt">CustomView</span><span class="o">.</span><span class="k">self</span><span class="p">)</span>
+<span class="k">let</span> <span class="nv">sut</span> <span class="o">=</span> <span class="n">customView</span><span class="o">.</span><span class="nf">actualView</span><span class="p">()</span>
+<span class="kt">XCTAssertTrue</span><span class="p">(</span><span class="n">sut</span><span class="o">.</span><span class="n">isToggleOn</span><span class="p">)</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>You can read the actual values from the standard SwiftUI views, such as <code class="language-plaintext highlighter-rouge">String</code> value of <code class="language-plaintext highlighter-rouge">Text</code></p>
+
+<div class="language-swift highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre></td><td class="rouge-code"><pre><span class="k">let</span> <span class="nv">view</span> <span class="o">=</span> <span class="kt">ContentView</span><span class="p">()</span>
+<span class="k">let</span> <span class="nv">value</span> <span class="o">=</span> <span class="k">try</span> <span class="n">view</span><span class="o">.</span><span class="nf">inspect</span><span class="p">()</span><span class="o">.</span><span class="nf">text</span><span class="p">()</span><span class="o">.</span><span class="nf">string</span><span class="p">()</span>
+<span class="kt">XCTAssertEqual</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="s">"Hello, world!"</span><span class="p">)</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>And it is also possible to programmatically trigger side effects on behalf of the user:</p>
+
+<div class="language-swift highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+</pre></td><td class="rouge-code"><pre><span class="k">let</span> <span class="nv">view</span> <span class="o">=</span> <span class="kt">ContentView</span><span class="p">()</span>
+<span class="k">let</span> <span class="nv">button</span> <span class="o">=</span> <span class="k">try</span> <span class="n">view</span><span class="o">.</span><span class="nf">inspect</span><span class="p">()</span><span class="o">.</span><span class="nf">hStack</span><span class="p">()</span><span class="o">.</span><span class="nf">button</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="k">try</span> <span class="n">button</span><span class="o">.</span><span class="nf">tap</span><span class="p">()</span>
+
+<span class="k">let</span> <span class="nv">textField</span> <span class="o">=</span> <span class="k">try</span> <span class="n">view</span><span class="o">.</span><span class="nf">inspect</span><span class="p">()</span><span class="o">.</span><span class="nf">hStack</span><span class="p">()</span><span class="o">.</span><span class="nf">textField</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="k">try</span> <span class="n">textField</span><span class="o">.</span><span class="nf">callOnCommit</span><span class="p">()</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>By now, the framework supports the majority of views available in SwiftUI for iOS and macOS, as well as views ported from UIKit with <code class="language-plaintext highlighter-rouge">UIViewRepresentable</code>:</p>
+
+<blockquote>
+  <p><code class="language-plaintext highlighter-rouge">AnyView</code>, <code class="language-plaintext highlighter-rouge">Button</code>, <code class="language-plaintext highlighter-rouge">DatePicker</code>, <code class="language-plaintext highlighter-rouge">Divider</code>, <code class="language-plaintext highlighter-rouge">EquatableView</code>, <code class="language-plaintext highlighter-rouge">ForEach</code>, <code class="language-plaintext highlighter-rouge">Form</code>, <code class="language-plaintext highlighter-rouge">GeometryReader</code>, <code class="language-plaintext highlighter-rouge">Group</code>, <code class="language-plaintext highlighter-rouge">GroupBox</code>, <code class="language-plaintext highlighter-rouge">HSplitView</code>, <code class="language-plaintext highlighter-rouge">HStack</code>, <code class="language-plaintext highlighter-rouge">Image</code>, <code class="language-plaintext highlighter-rouge">List</code>, <code class="language-plaintext highlighter-rouge">ModifiedContent</code>, <code class="language-plaintext highlighter-rouge">NavigationLink</code>, <code class="language-plaintext highlighter-rouge">NavigationView</code>, <code class="language-plaintext highlighter-rouge">Picker</code>, <code class="language-plaintext highlighter-rouge">ScrollView</code>, <code class="language-plaintext highlighter-rouge">Section</code>, <code class="language-plaintext highlighter-rouge">SecureField</code>, <code class="language-plaintext highlighter-rouge">Slider</code>, <code class="language-plaintext highlighter-rouge">Stepper</code>, <code class="language-plaintext highlighter-rouge">TabView</code>, <code class="language-plaintext highlighter-rouge">Text</code>, <code class="language-plaintext highlighter-rouge">TextField</code>, <code class="language-plaintext highlighter-rouge">Toggle</code>, <code class="language-plaintext highlighter-rouge">VSplitView</code>, <code class="language-plaintext highlighter-rouge">VStack</code>, <code class="language-plaintext highlighter-rouge">ZStack</code></p>
+</blockquote>
+
+<p>I did eventually hit a few unbreakable walls, but overall, I’m satisfied with the result.</p>
+
+<p>Ok, it’s time for some hacky stories!</p>
+
+<h2 id="creating-a-struct-without-calling-init">Creating a struct without calling <code class="language-plaintext highlighter-rouge">init()</code></h2>
+
+<p>There is one interesting SwiftUI view that provides information about the view’s container size: <code class="language-plaintext highlighter-rouge">GeometryReader</code></p>
+
+<div class="language-swift highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+</pre></td><td class="rouge-code"><pre><span class="kt">GeometryReader</span> <span class="p">{</span> <span class="n">geometry</span> <span class="k">in</span>
+    <span class="kt">Text</span><span class="p">(</span><span class="s">"Hello, world!"</span><span class="p">)</span>
+        <span class="o">.</span><span class="nf">padding</span><span class="p">(</span><span class="n">geometry</span><span class="o">.</span><span class="n">size</span><span class="o">.</span><span class="n">width</span><span class="p">)</span>
+<span class="p">}</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>The reflection showed that this view does not store the contained view directly. Instead, it holds a closure for building the enclosed views. The closure takes one parameter - the <code class="language-plaintext highlighter-rouge">GeometryProxy</code> value.</p>
+
+<p>This means that the only way to obtain the <code class="language-plaintext highlighter-rouge">Text</code> view in the example above is to call that closure with a <code class="language-plaintext highlighter-rouge">GeometryProxy</code>.</p>
+
+<p>Ok, fortunately, <code class="language-plaintext highlighter-rouge">GeometryProxy</code> is a public struct… But it has no public initializers!</p>
+
+<p>How can we construct a value without a factory?</p>
+
+<p>Value types, as opposed to objects, don’t require storing pointers to the parent class for self-identification, meaning that they remain functional without <code class="language-plaintext highlighter-rouge">isa</code> pointers inside… I had one crazy idea in my mind, and I decided to try!</p>
+
+<p>At first, I wanted to find out the number of bytes that <code class="language-plaintext highlighter-rouge">GeometryProxy</code> takes. Swift provides <code class="language-plaintext highlighter-rouge">MemoryLayout</code> for this purpose:</p>
+
+<div class="language-swift highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="rouge-code"><pre><span class="kt">MemoryLayout</span><span class="o">&lt;</span><span class="kt">GeometryProxy</span><span class="o">&gt;.</span><span class="n">size</span>
+<span class="o">&gt;&gt;</span> <span class="mi">48</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>There are two options where to allocate the memory - on the stack and on the heap.</p>
+
+<p>The latter is more flexible, as you can just specify the number of bytes you need:</p>
+
+<div class="language-swift highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="rouge-code"><pre><span class="k">let</span> <span class="nv">pointer</span> <span class="o">=</span> <span class="kt">UnsafeMutableRawBufferPointer</span>
+                <span class="o">.</span><span class="nf">allocate</span><span class="p">(</span><span class="nv">byteCount</span><span class="p">:</span> <span class="mi">48</span><span class="p">,</span> <span class="nv">alignment</span><span class="p">:</span> <span class="mi">8</span><span class="p">)</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>But dynamic memory requires manual deallocation with <code class="language-plaintext highlighter-rouge">deallocate()</code> and is slower than allocation on the stack, so I decided to go with the first option, which is more exotic.</p>
+
+<p>I needed to declare a value type that would take the same amount of bytes: 48. I called <code class="language-plaintext highlighter-rouge">MemoryLayout</code> for a <code class="language-plaintext highlighter-rouge">Double</code>, and expectedly got the following:</p>
+
+<div class="language-swift highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="rouge-code"><pre><span class="kt">MemoryLayout</span><span class="o">&lt;</span><span class="kt">Double</span><span class="o">&gt;.</span><span class="n">size</span>
+<span class="o">&gt;&gt;</span> <span class="mi">8</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>So if I declared a struct, for example, that kept 6 Doubles, its total memory size should be 48:</p>
+
+<div class="language-swift highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+</pre></td><td class="rouge-code"><pre><span class="kd">struct</span> <span class="kt">Allocator</span> <span class="p">{</span>
+    <span class="k">let</span> <span class="nv">data</span><span class="p">:</span> <span class="p">(</span><span class="kt">Double</span><span class="p">,</span> <span class="kt">Double</span><span class="p">,</span> <span class="kt">Double</span><span class="p">,</span> 
+               <span class="kt">Double</span><span class="p">,</span> <span class="kt">Double</span><span class="p">,</span> <span class="kt">Double</span><span class="p">)</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<span class="p">}</span>
+<span class="kt">MemoryLayout</span><span class="o">&lt;</span><span class="kt">Allocator</span><span class="o">&gt;.</span><span class="n">size</span>
+<span class="o">&gt;&gt;</span> <span class="mi">48</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>Great! The last step was to cast the types:</p>
+
+<div class="language-swift highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre><span class="k">let</span> <span class="nv">proxy</span> <span class="o">=</span> <span class="nf">unsafeBitCast</span><span class="p">(</span><span class="kt">Allocator</span><span class="p">(),</span> <span class="nv">to</span><span class="p">:</span> <span class="kt">GeometryProxy</span><span class="o">.</span><span class="k">self</span><span class="p">)</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<blockquote>
+  <p>It’s alive!! Alive!!!</p>
+</blockquote>
+
+<p>Of course, there were no guarantees the fake <code class="language-plaintext highlighter-rouge">GeometryProxy</code> would work correctly, as the inner variables may not expect to be zeros, but fortunately, this worked well:</p>
+
+<div class="language-swift highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="rouge-code"><pre><span class="n">proxy</span><span class="o">.</span><span class="n">size</span>
+<span class="o">&gt;&gt;</span> <span class="kt">CGSize</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>I had an idea to find the position of bytes responsible for storing the CGSize and initialize them with the custom value, but reflection showed that <code class="language-plaintext highlighter-rouge">size</code>, just like all the other public vars on <code class="language-plaintext highlighter-rouge">GeometryProxy</code> are computed, so there was no way to achieve this.</p>
+
+<p>So after I called the factory closure on the <code class="language-plaintext highlighter-rouge">GeometryReader</code> with this “Frankenstein” struct, I got the contained views with no issues! Of course, the layout of the views is screwed, but at least, the values like the string on <code class="language-plaintext highlighter-rouge">Text</code> could be safely extracted.</p>
+
+<h2 id="casting-to-an-unknown-generic-type">Casting to an unknown generic type</h2>
+
+<p>Another notable case was with <code class="language-plaintext highlighter-rouge">ForEach</code>. To explore the internals I made a simple setup with an array of strings transformed to <code class="language-plaintext highlighter-rouge">Text</code> views:</p>
+
+<div class="language-swift highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="rouge-code"><pre><span class="k">let</span> <span class="nv">array</span> <span class="o">=</span> <span class="p">[</span><span class="s">"0"</span><span class="p">,</span> <span class="s">"1"</span><span class="p">,</span> <span class="s">"2"</span><span class="p">]</span>
+<span class="k">let</span> <span class="nv">view</span> <span class="o">=</span> <span class="kt">ForEach</span><span class="p">(</span><span class="n">array</span><span class="p">,</span> <span class="nv">id</span><span class="p">:</span> <span class="p">\</span><span class="o">.</span><span class="k">self</span><span class="p">)</span> <span class="p">{</span> <span class="kt">Text</span><span class="p">(</span><span class="nv">$0</span><span class="p">)</span> <span class="p">}</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>My BFG10K function <code class="language-plaintext highlighter-rouge">attributesTree(value:)</code> showed the following:</p>
+
+<div class="language-swift highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+</pre></td><td class="rouge-code"><pre><span class="s">"view"</span> <span class="n">of</span> <span class="n">type</span> <span class="kt">ForEach</span><span class="o">&lt;</span><span class="kt">Array</span><span class="o">&lt;</span><span class="kt">String</span><span class="o">&gt;</span><span class="p">,</span> <span class="kt">String</span><span class="p">,</span> <span class="kt">Text</span><span class="o">&gt;</span>
+  <span class="err">↳</span> <span class="s">"data"</span> <span class="n">of</span> <span class="n">type</span> <span class="kt">Array</span><span class="o">&lt;</span><span class="kt">String</span><span class="o">&gt;</span>
+      <span class="err">↳</span> <span class="n">value</span> <span class="o">=</span> <span class="p">[</span><span class="s">"0"</span><span class="p">,</span> <span class="s">"1"</span><span class="p">,</span> <span class="s">"2"</span><span class="p">]</span>
+  <span class="err">↳</span> <span class="s">"content"</span> <span class="n">of</span> <span class="nf">type</span> <span class="p">(</span><span class="kt">String</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Text</span>
+  <span class="err">↳</span> <span class="s">"idGenerator"</span> <span class="n">of</span> <span class="n">type</span> <span class="kt">WritableKeyPath</span><span class="o">&lt;</span><span class="kt">String</span><span class="p">,</span> <span class="kt">String</span><span class="o">&gt;</span>
+      <span class="err">↳</span> <span class="n">value</span> <span class="o">=</span> <span class="kt">WritableKeyPath</span><span class="o">&lt;</span><span class="kt">String</span><span class="p">,</span> <span class="kt">String</span><span class="o">&gt;</span>
+  <span class="err">↳</span> <span class="s">"contentID"</span> <span class="n">of</span> <span class="n">type</span> <span class="kt">Int</span>
+      <span class="err">↳</span> <span class="n">value</span> <span class="o">=</span> <span class="mi">0</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>So I could extract the <code class="language-plaintext highlighter-rouge">Text</code> views using the content builder closure <code class="language-plaintext highlighter-rouge">content: (String) -&gt; Text</code> by providing it with an element of <code class="language-plaintext highlighter-rouge">data: [String]</code> array.</p>
+
+<p>All I needed was to cast <code class="language-plaintext highlighter-rouge">data</code> and <code class="language-plaintext highlighter-rouge">content</code> to correct types from reflection’s default type <code class="language-plaintext highlighter-rouge">Any</code>:</p>
+
+<div class="language-swift highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+</pre></td><td class="rouge-code"><pre><span class="kd">func</span> <span class="nf">extractContentOfForEach</span><span class="p">(</span><span class="nv">view</span><span class="p">:</span> <span class="kt">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">[</span><span class="kt">Any</span><span class="p">]</span> <span class="p">{</span>
+    <span class="k">let</span> <span class="nv">mirror</span> <span class="o">=</span> <span class="kt">Mirror</span><span class="p">(</span><span class="nv">reflecting</span><span class="p">:</span> <span class="n">view</span><span class="p">)</span>
+    <span class="k">let</span> <span class="nv">data</span><span class="p">:</span> <span class="kt">Any</span> <span class="o">=</span> <span class="n">mirror</span><span class="o">.</span><span class="nf">descendant</span><span class="p">(</span><span class="s">"data"</span><span class="p">)</span>
+    <span class="k">let</span> <span class="nv">content</span><span class="p">:</span> <span class="kt">Any</span> <span class="o">=</span> <span class="n">mirror</span><span class="o">.</span><span class="nf">descendant</span><span class="p">(</span><span class="s">"content"</span><span class="p">)</span>
+    <span class="k">if</span> <span class="k">let</span> <span class="nv">array</span> <span class="o">=</span> <span class="n">data</span> <span class="k">as?</span> <span class="p">[</span><span class="kt">String</span><span class="p">],</span>
+       <span class="k">let</span> <span class="nv">builder</span> <span class="o">=</span> <span class="n">content</span> <span class="nf">as</span><span class="p">?</span> <span class="p">(</span><span class="kt">String</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Text</span> <span class="p">{</span>
+       <span class="c1">// works for the case with String and Text</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>Hardcoding types <code class="language-plaintext highlighter-rouge">String</code> and <code class="language-plaintext highlighter-rouge">Text</code>, of course, wouldn’t work for an arbitrary <code class="language-plaintext highlighter-rouge">ForEach</code>, so I needed to get the types from elsewhere.</p>
+
+<p>A naive attempt to obtain the type dynamically with <code class="language-plaintext highlighter-rouge">type(of: value)</code> did not make the compiler happy - it needs to know the types in compile time. Basically this is not a valid code: <code class="language-plaintext highlighter-rouge">let casted = value as? type(of: value)</code></p>
+
+<p>Ok, the Type information should be known at compile time. From where could we get it?</p>
+
+<p>The first workable solution I came up with was to provide the types from the caller side:</p>
+
+<div class="language-swift highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+</pre></td><td class="rouge-code"><pre><span class="kd">func</span> <span class="n">extract</span><span class="o">&lt;</span><span class="kt">Element</span><span class="p">,</span><span class="kt">Content</span><span class="o">&gt;</span><span class="p">(</span><span class="nv">view</span><span class="p">:</span> <span class="kt">Any</span><span class="p">,</span> 
+                              <span class="nv">element</span><span class="p">:</span> <span class="kt">Element</span><span class="o">.</span><span class="k">Type</span><span class="p">,</span>
+                              <span class="nv">content</span><span class="p">:</span> <span class="kt">Content</span><span class="o">.</span><span class="k">Type</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">[</span><span class="kt">Any</span><span class="p">]</span> <span class="p">{</span>
+    <span class="k">let</span> <span class="nv">mirror</span> <span class="o">=</span> <span class="kt">Mirror</span><span class="p">(</span><span class="nv">reflecting</span><span class="p">:</span> <span class="n">view</span><span class="p">)</span>
+    <span class="k">let</span> <span class="nv">data</span><span class="p">:</span> <span class="kt">Any</span> <span class="o">=</span> <span class="n">mirror</span><span class="o">.</span><span class="nf">descendant</span><span class="p">(</span><span class="s">"data"</span><span class="p">)</span>
+    <span class="k">let</span> <span class="nv">content</span><span class="p">:</span> <span class="kt">Any</span> <span class="o">=</span> <span class="n">mirror</span><span class="o">.</span><span class="nf">descendant</span><span class="p">(</span><span class="s">"content"</span><span class="p">)</span>
+    <span class="k">if</span> <span class="k">let</span> <span class="nv">array</span> <span class="o">=</span> <span class="n">data</span> <span class="k">as?</span> <span class="p">[</span><span class="kt">Element</span><span class="p">],</span>
+       <span class="k">let</span> <span class="nv">builder</span> <span class="o">=</span> <span class="n">content</span> <span class="nf">as</span><span class="p">?</span> <span class="p">(</span><span class="kt">Element</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Content</span> <span class="p">{</span>
+           <span class="k">return</span> <span class="n">array</span><span class="o">.</span><span class="n">map</span> <span class="p">{</span> <span class="nf">builder</span><span class="p">(</span><span class="nv">$0</span><span class="p">)</span> <span class="p">}</span>
+       <span class="p">}</span>
+    <span class="k">return</span> <span class="p">[]</span>
+<span class="p">}</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>I didn’t like this approach because it was bulky and inconvenient to use, so I appealed to the following hack.</p>
+
+<p>I’ve declared a type-erased middleware protocol and extended the <code class="language-plaintext highlighter-rouge">ForEach</code> to conform to that protocol. The trick is that in the extension of the <code class="language-plaintext highlighter-rouge">ForEach</code> we have the inner type information required for the content extraction:</p>
+
+<div class="language-swift highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+</pre></td><td class="rouge-code"><pre><span class="kd">protocol</span> <span class="kt">ForEachContentProvider</span> <span class="p">{</span>
+    <span class="kd">func</span> <span class="nf">extractContent</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="p">[</span><span class="kt">Any</span><span class="p">]</span>
+<span class="p">}</span>
+
+<span class="kd">extension</span> <span class="kt">ForEach</span><span class="p">:</span> <span class="kt">ForEachContentProvider</span> <span class="p">{</span>
+
+    <span class="kd">func</span> <span class="nf">extractContent</span><span class="p">()</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="p">[</span><span class="kt">Any</span><span class="p">]</span> <span class="p">{</span>
+	    <span class="k">let</span> <span class="nv">mirror</span> <span class="o">=</span> <span class="kt">Mirror</span><span class="p">(</span><span class="nv">reflecting</span><span class="p">:</span> <span class="n">view</span><span class="p">)</span>
+	    <span class="k">let</span> <span class="nv">data</span><span class="p">:</span> <span class="kt">Any</span> <span class="o">=</span> <span class="n">mirror</span><span class="o">.</span><span class="nf">descendant</span><span class="p">(</span><span class="s">"data"</span><span class="p">)</span>
+	    <span class="k">let</span> <span class="nv">content</span><span class="p">:</span> <span class="kt">Any</span> <span class="o">=</span> <span class="n">mirror</span><span class="o">.</span><span class="nf">descendant</span><span class="p">(</span><span class="s">"content"</span><span class="p">)</span>
+	    <span class="c1">// Types Data and Content are known in this context</span>
+	    <span class="k">if</span> <span class="k">let</span> <span class="nv">array</span> <span class="o">=</span> <span class="n">data</span> <span class="k">as?</span> <span class="p">[</span><span class="kt">Data</span><span class="o">.</span><span class="kt">Element</span><span class="p">],</span>
+	       <span class="k">let</span> <span class="nv">builder</span> <span class="o">=</span> <span class="n">content</span> <span class="nf">as</span><span class="p">?</span> <span class="p">(</span><span class="kt">Data</span><span class="o">.</span><span class="kt">Element</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Content</span> <span class="p">{</span>
+	           <span class="k">return</span> <span class="n">array</span><span class="o">.</span><span class="n">map</span> <span class="p">{</span> <span class="nf">builder</span><span class="p">(</span><span class="nv">$0</span><span class="p">)</span> <span class="p">}</span>
+	       <span class="p">}</span>
+	    <span class="k">return</span> <span class="p">[]</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>So the original extraction function now just needed to cast the <code class="language-plaintext highlighter-rouge">view: Any</code> to the middleware protocol and call <code class="language-plaintext highlighter-rouge">extractContent()</code>. Since <code class="language-plaintext highlighter-rouge">ForEach</code> now conforms to that protocol, the cast succeeds and the extraction works as expected:</p>
+
+<div class="language-swift highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+</pre></td><td class="rouge-code"><pre><span class="kd">func</span> <span class="nf">extractContentOfForEach</span><span class="p">(</span><span class="nv">view</span><span class="p">:</span> <span class="kt">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">[</span><span class="kt">Any</span><span class="p">]</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="k">let</span> <span class="nv">forEach</span> <span class="o">=</span> <span class="n">view</span> <span class="k">as?</span> <span class="kt">ForEachContentProvider</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">forEach</span><span class="o">.</span><span class="nf">extractContent</span><span class="p">()</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="p">[]</span>
+<span class="p">}</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<h2 id="swiftuis-native-environment-injection">SwiftUI’s native Environment injection</h2>
+
+<p>SwiftUI has a very handy dependency injection mechanism through <code class="language-plaintext highlighter-rouge">@ObservedObject</code>, <code class="language-plaintext highlighter-rouge">@EnvironmentObject</code> and <code class="language-plaintext highlighter-rouge">@Environment</code> attributes.</p>
+
+<p>While there was no practical problem with supporting <code class="language-plaintext highlighter-rouge">@ObservedObject</code> in the inspection framework, I had to spend quite some time trying to figure out how to inject <code class="language-plaintext highlighter-rouge">@EnvironmentObject</code>.</p>
+
+<p>When a view receives traditional DI injection through <code class="language-plaintext highlighter-rouge">.environmentObject(...)</code> it gets wrapped into a view of type <code class="language-plaintext highlighter-rouge">ModifiedContent</code>. This type of view is widely used throughout SwiftUI for applying various tweaks to the view, such as <code class="language-plaintext highlighter-rouge">.padding()</code>, <code class="language-plaintext highlighter-rouge">.blur(radius:)</code>, etc.</p>
+
+<p><code class="language-plaintext highlighter-rouge">ModifiedContent</code> is quite transparent - one of its attributes, called <code class="language-plaintext highlighter-rouge">content</code>, provides the enclosed view, which could be easily extracted.</p>
+
+<p>The problem is with the other attribute: <code class="language-plaintext highlighter-rouge">modifier</code>, which usually refers to the value of a “semi-private” type, such as <code class="language-plaintext highlighter-rouge">_PaddingLayout</code>. I called them semi-private because Xcode recognizes these types if you paste them in the source code, but their symbols are excluded from the public headers: if you control-click and select “Jump to Definition”, Xcode won’t be able to locate them.</p>
+
+<p>For some types, Xcode Autocomplete shows a few instance vars, for example, <code class="language-plaintext highlighter-rouge">_PaddingLayout</code> has <code class="language-plaintext highlighter-rouge">var edges: Edge.Set</code> and <code class="language-plaintext highlighter-rouge">var insets: EdgeInsets?</code></p>
+
+<p>So going back to the problem of injecting <code class="language-plaintext highlighter-rouge">@EnvironmentObject</code>: the view gets wrapped in a <code class="language-plaintext highlighter-rouge">ModifiedContent</code> which <code class="language-plaintext highlighter-rouge">modifier</code> has the type <code class="language-plaintext highlighter-rouge">_EnvironmentKeyWritingModifier&lt;InjectedObject?&gt;</code>.</p>
+
+<p>That modifier has no public methods, and here is what reflection shows for it, when we inject an object of type <code class="language-plaintext highlighter-rouge">InjectedObject</code>:</p>
+
+<div class="language-swift highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+</pre></td><td class="rouge-code"><pre><span class="s">"modifier"</span> <span class="n">of</span> <span class="n">type</span> <span class="n">_EnvironmentKeyWritingModifier</span><span class="o">&lt;</span><span class="kt">InjectedObject</span><span class="p">?</span><span class="o">&gt;</span>
+   <span class="err">↳</span> <span class="s">"keyPath"</span> <span class="n">of</span> <span class="n">type</span> <span class="kt">WritableKeyPath</span>
+       <span class="err">↳</span> <span class="n">value</span> <span class="o">=</span> <span class="kt">WritableKeyPath</span><span class="o">&lt;</span><span class="kt">EnvironmentValues</span><span class="p">,</span> <span class="kt">InjectedObject</span><span class="p">?</span><span class="o">&gt;</span>
+   <span class="err">↳</span> <span class="s">"value"</span> <span class="n">of</span> <span class="n">type</span> <span class="kt">InjectedObject</span><span class="p">?</span>
+       <span class="err">↳</span> <span class="n">value</span> <span class="o">=</span> <span class="kt">InjectedObject</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>It does keep the reference to the <code class="language-plaintext highlighter-rouge">InjectedObject</code>, and also has a <code class="language-plaintext highlighter-rouge">WritableKeyPath</code> for <code class="language-plaintext highlighter-rouge">EnvironmentValues</code>.</p>
+
+<p>Those <code class="language-plaintext highlighter-rouge">EnvironmentValues</code> are very mysterious. So far I know that both <code class="language-plaintext highlighter-rouge">@EnvironmentObject</code> and <code class="language-plaintext highlighter-rouge">@Environment</code> are using it for storing the values used by the SwiftUI views, but my experiments showed that the <code class="language-plaintext highlighter-rouge">EnvironmentValues</code> are provided to the view hierarchy only at the render time – and withdrawn after!</p>
+
+<p>Try running the following code:</p>
+
+<div class="language-swift highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+</pre></td><td class="rouge-code"><pre><span class="kd">struct</span> <span class="kt">ContentView</span><span class="p">:</span> <span class="kt">View</span> <span class="p">{</span>
+    <span class="kd">@EnvironmentObject</span> <span class="k">var</span> <span class="nv">object</span><span class="p">:</span> <span class="kt">InjectedObject</span>
+    
+    <span class="k">var</span> <span class="nv">body</span><span class="p">:</span> <span class="n">some</span> <span class="kt">View</span> <span class="p">{</span>
+        <span class="kt">DispatchQueue</span><span class="o">.</span><span class="n">main</span><span class="o">.</span><span class="n">async</span> <span class="p">{</span>
+            <span class="nf">print</span><span class="p">(</span><span class="s">"</span><span class="se">\(</span><span class="k">self</span><span class="o">.</span><span class="n">object</span><span class="o">.</span><span class="n">flag</span><span class="se">)</span><span class="s">"</span><span class="p">)</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="kt">Text</span><span class="p">(</span><span class="n">object</span><span class="o">.</span><span class="n">flag</span> <span class="p">?</span> <span class="s">"Flag is on"</span> <span class="p">:</span> <span class="s">"Flag is off"</span><span class="p">)</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>… and you’ll see that asynchronous reading of <code class="language-plaintext highlighter-rouge">@EnvironmentObject</code> outside of the rendering cycle is prohibited - you’ll get the same crash as if you never provided <code class="language-plaintext highlighter-rouge">InjectedObject</code> in <code class="language-plaintext highlighter-rouge">.environmentObject(...)</code> call.</p>
+
+<h2 id="design-decisions-behind-the-inspection-framework">Design decisions behind the inspection framework</h2>
+
+<p>I wanted to make the library safe and convenient to use. All I had was just an idea how the syntax on the caller side should look like: it should be chained calls like <code class="language-plaintext highlighter-rouge">view.anyView.hStack.button</code></p>
+
+<p>It was clear that each intermediate element should return a statically typed value which would restrict the available options: there is no sense of calling <code class="language-plaintext highlighter-rouge">.tap()</code> for <code class="language-plaintext highlighter-rouge">AnyView</code>, or <code class="language-plaintext highlighter-rouge">.hStack</code> on a <code class="language-plaintext highlighter-rouge">Text</code>.</p>
+
+<p>One of the options was to create an object-oriented hierarchy of classes, but after using functional and protocol-oriented programming for a few years I developed a strong allergy to OOP 🧐</p>
+
+<p>So I decided to use a unified struct <code class="language-plaintext highlighter-rouge">InspectableView</code> and encapsulate the polymorphic behavior in its Generic parameter <code class="language-plaintext highlighter-rouge">View</code>:</p>
+
+<div class="language-swift highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre></td><td class="rouge-code"><pre><span class="kd">struct</span> <span class="kt">InspectableView</span><span class="o">&lt;</span><span class="kt">View</span><span class="o">&gt;</span> <span class="p">{</span>
+    <span class="k">let</span> <span class="nv">view</span><span class="p">:</span> <span class="kt">Any</span>
+<span class="p">}</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>At first, I thought I’ll be using SwiftUI views as the <code class="language-plaintext highlighter-rouge">View</code> parameter, but quickly realized that most of the SwiftUI views have generic parameters as well, and constructions like <code class="language-plaintext highlighter-rouge">InspectableView&lt;HStack&lt;VStach&lt;Text&gt;&gt;&gt;</code> would be too cumbersome and fragile to operate.</p>
+
+<p>Instead, I’ve created an empty <code class="language-plaintext highlighter-rouge">struct ViewType { }</code> that served as the base namespace for future view types: <code class="language-plaintext highlighter-rouge">ViewType.Button</code> being a representative for the <code class="language-plaintext highlighter-rouge">Button</code> view, for example.</p>
+
+<p>I thought that the user of the library could falsely assume they can substitute SwiftUI views in that parameter. In order to help them quickly identify that this is the wrong path, I’ve put a restriction on the generic type to conform to a simple protocol <code class="language-plaintext highlighter-rouge">KnownViewType</code>, which SwiftUI views don’t conform to by default:</p>
+
+<div class="language-swift highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+</pre></td><td class="rouge-code"><pre><span class="kd">protocol</span> <span class="kt">KnownViewType</span> <span class="p">{</span> <span class="p">}</span>
+
+<span class="kd">struct</span> <span class="kt">InspectableView</span><span class="o">&lt;</span><span class="kt">View</span><span class="o">&gt;</span> <span class="k">where</span> <span class="kt">View</span><span class="p">:</span> <span class="kt">KnownViewType</span> <span class="p">{</span>
+    <span class="k">let</span> <span class="nv">view</span><span class="p">:</span> <span class="kt">Any</span>
+<span class="p">}</span>
+
+<span class="kd">struct</span> <span class="kt">ViewType</span> <span class="p">{</span> <span class="p">}</span>
+
+<span class="kd">extension</span> <span class="kt">ViewType</span> <span class="p">{</span>    
+    <span class="kd">struct</span> <span class="kt">Button</span><span class="p">:</span> <span class="kt">KnownViewType</span> <span class="p">{</span> <span class="p">}</span>
+<span class="p">}</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>Now it was all ready to start building the polymorphic behavior with generics.</p>
+
+<p>The views in SwiftUI can either contain a single view (<code class="language-plaintext highlighter-rouge">AnyView</code>), a collection of views (<code class="language-plaintext highlighter-rouge">HStack</code>), or no other views (<code class="language-plaintext highlighter-rouge">Text</code>).</p>
+
+<p>In order to encapsulate this behavior, I defined two protocols: <code class="language-plaintext highlighter-rouge">SingleViewContent</code> and <code class="language-plaintext highlighter-rouge">MultipleViewContent</code></p>
+
+<div class="language-swift highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+</pre></td><td class="rouge-code"><pre><span class="kd">protocol</span> <span class="kt">SingleViewContent</span> <span class="p">{</span>
+    <span class="kd">static</span> <span class="kd">func</span> <span class="nf">content</span><span class="p">(</span><span class="nv">view</span><span class="p">:</span> <span class="kt">Any</span><span class="p">,</span> <span class="nv">envObject</span><span class="p">:</span> <span class="kt">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Any</span><span class="p">?</span>
+<span class="p">}</span>
+
+<span class="kd">protocol</span> <span class="kt">MultipleViewContent</span> <span class="p">{</span>
+    <span class="kd">static</span> <span class="kd">func</span> <span class="nf">content</span><span class="p">(</span><span class="nv">view</span><span class="p">:</span> <span class="kt">Any</span><span class="p">,</span> <span class="nv">envObject</span><span class="p">:</span> <span class="kt">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">[</span><span class="kt">Any</span><span class="p">]?</span>
+<span class="p">}</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>Now any <code class="language-plaintext highlighter-rouge">ViewType</code> was able to adopt the content extraction strategy based on its nature:</p>
+
+<div class="language-swift highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+</pre></td><td class="rouge-code"><pre><span class="kd">extension</span> <span class="kt">ViewType</span><span class="o">.</span><span class="kt">AnyView</span><span class="p">:</span> <span class="kt">SingleViewContent</span> <span class="p">{</span>
+    <span class="kd">static</span> <span class="kd">func</span> <span class="nf">content</span><span class="p">(</span><span class="nv">view</span><span class="p">:</span> <span class="kt">Any</span><span class="p">,</span> <span class="nv">envObject</span><span class="p">:</span> <span class="kt">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Any</span><span class="p">?</span> <span class="p">{</span>
+        <span class="o">...</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">extension</span> <span class="kt">ViewType</span><span class="o">.</span><span class="kt">HStack</span><span class="p">:</span> <span class="kt">MultipleViewContent</span> <span class="p">{</span>
+    <span class="kd">static</span> <span class="kd">func</span> <span class="nf">content</span><span class="p">(</span><span class="nv">view</span><span class="p">:</span> <span class="kt">Any</span><span class="p">,</span> <span class="nv">envObject</span><span class="p">:</span> <span class="kt">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">[</span><span class="kt">Any</span><span class="p">]?</span> <span class="p">{</span>
+        <span class="o">...</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>For views like <code class="language-plaintext highlighter-rouge">Text</code> that don’t have a contained view, its companion <code class="language-plaintext highlighter-rouge">ViewType</code> simply opts out of conforming to either of these protocols.</p>
+
+<p>Now every <code class="language-plaintext highlighter-rouge">ViewType</code> could declare its strategy of extracting the content.</p>
+
+<p>The last piece of the puzzle was to add methods, such as <code class="language-plaintext highlighter-rouge">.hStack</code> for extraction FROM the parent.</p>
+
+<p>This one was easy - I just extended <code class="language-plaintext highlighter-rouge">InspectableView where View: SingleViewContent</code> with a method named after the type of view intended for extraction, allowing such views to continue the chain with <code class="language-plaintext highlighter-rouge">.hStack</code>, for example:</p>
+
+<div class="language-swift highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+</pre></td><td class="rouge-code"><pre><span class="kd">public</span> <span class="kd">extension</span> <span class="kt">InspectableView</span> <span class="k">where</span> <span class="kt">View</span><span class="p">:</span> <span class="kt">SingleViewContent</span> <span class="p">{</span>
+    
+    <span class="k">var</span> <span class="nv">hStack</span><span class="p">:</span> <span class="kt">InspectableView</span><span class="o">&lt;</span><span class="kt">ViewType</span><span class="o">.</span><span class="kt">HStack</span><span class="o">&gt;</span><span class="p">?</span> <span class="p">{</span>
+        <span class="o">...</span>
+        <span class="k">return</span> <span class="kt">InspectableView</span><span class="o">&lt;</span><span class="kt">ViewType</span><span class="o">.</span><span class="kt">HStack</span><span class="o">&gt;</span><span class="p">(</span><span class="n">extractedView</span><span class="p">)</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>A similar extension is defined for <code class="language-plaintext highlighter-rouge">MultipleViewContent</code> as well.</p>
+
+<p>Finally, for types like <code class="language-plaintext highlighter-rouge">ViewType.Button</code>, I could add exclusive support of the methods like <code class="language-plaintext highlighter-rouge">.tap()</code></p>
+
+<div class="language-swift highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+</pre></td><td class="rouge-code"><pre><span class="kd">extension</span> <span class="kt">InspectableView</span> <span class="k">where</span> <span class="kt">View</span> <span class="o">==</span> <span class="kt">ViewType</span><span class="o">.</span><span class="kt">Button</span> <span class="p">{</span>
+    <span class="kd">func</span> <span class="nf">tap</span><span class="p">()</span> <span class="p">{</span>
+        <span class="o">...</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>With this approach <code class="language-plaintext highlighter-rouge">InspectableView</code> obtained a controlled set of methods available for particular <code class="language-plaintext highlighter-rouge">ViewType</code>, eliminating the possible logical errors when working with the view extraction library.</p>
+
+<hr />
+
+<p>That’s the story behind creating the <a href="https://github.com/nalexn/ViewInspector">ViewInspector</a> framework. If you have a SwiftUI project you want to cover with Unit Tests - consider trying it out! I’m accepting pull requests and general feedback!</p>
+
+<p>If you want to better understand the inner SwiftUI mechanisms used under the hood, take that function <code class="language-plaintext highlighter-rouge">attributesTree(value:)</code> and crack those black-boxed views! 😈</p>
+
+      <h2>Your appreciation is my inspiration!</h2>
+      <p>I have tons of unpublished kick-ass materials and ideas, but I need your help! Consider sharing this article on <a href="https://twitter.com/share?url=http://nalexn.github.io/swiftui-unit-testing/?utm_source=share_tw&amp;text=Who said we cannot unit test SwiftUI views?&amp;hashtags=iosdev&amp;via=nallexn" title="Twitter" target="_blank" onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=500');return false;"><i class="fa fa-twitter share-button"></i></a>, <a href="https://www.facebook.com/sharer/sharer.php?u=http://nalexn.github.io/swiftui-unit-testing/?utm_source=share_fb&amp;display=popup&amp;quote=Who said we cannot unit test SwiftUI views?&amp;hashtag=#iosdev" title="Facebook" target="_blank" onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=500');return false;"><i class="fa fa-facebook-f share-button"></i></a> or <a href="https://www.linkedin.com/sharing/share-offsite/?url=http://nalexn.github.io/swiftui-unit-testing/?utm_source=share_in" title="LinkedIn" target="_blank" onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=500');return false;"><i class="fa fa-linkedin share-button"></i></a>. This tiny action helps to grow this blog and inspires me to post more! (Or if you are nuts, <a href="https://venmo.com/nallexn" target="_blank">Venmo</a> me a drink!)</p>
+      </p>
+      <p>You can subscribe to <a href="http://nalexn.github.io/feed.xml" target="_blank">RSS feed</a> or follow my <a href="https://twitter.com/nallexn" target="_blank">Twitter</a> for the new articles alerts.
+
+      <div style="width:0px; height:30px; display: block;"></div>
+      <h2>Most recent articles</h2>
+      <div class="content-box recent clearfix" style="padding: 20px 10px;">
+        
+        
+          
+          <article class="post">
+            
+              <a class="post-thumbnail" style="background-image: url(/assets/img/layers_001.jpg)" href="/separation-of-concerns/"></a>
+            
+            <div class="post-content">
+              <h2 class="post-title"><a href="/separation-of-concerns/">Separation of Concerns in Software Design</a></h2>
+              <p></p>
+              <span class="post-date">2020, Jan 16&nbsp;&nbsp;&nbsp;—&nbsp;</span>
+              <span class="post-words">10 minute read</span>
+            </div>
+          </article>
+          
+        
+          
+          <article class="post">
+            
+              <a class="post-thumbnail" style="background-image: url(/assets/img/observable_001.jpg)" href="/swiftui-observableobject/"></a>
+            
+            <div class="post-content">
+              <h2 class="post-title"><a href="/swiftui-observableobject/">Why I quit using the ObservableObject</a></h2>
+              <p></p>
+              <span class="post-date">2019, Dec 20&nbsp;&nbsp;&nbsp;—&nbsp;</span>
+              <span class="post-words">7 minute read</span>
+            </div>
+          </article>
+          
+        
+          
+          <article class="post">
+            
+              <a class="post-thumbnail" style="background-image: url(/assets/img/comparison_01.jpg)" href="/anyview-vs-group/"></a>
+            
+            <div class="post-content">
+              <h2 class="post-title"><a href="/anyview-vs-group/">Performance Battle: AnyView vs Group</a></h2>
+              <p></p>
+              <span class="post-date">2019, Dec 05&nbsp;&nbsp;&nbsp;—&nbsp;</span>
+              <span class="post-words">9 minute read</span>
+            </div>
+          </article>
+          
+        
+          
+        
+          
+          <article class="post">
+            
+              <a class="post-thumbnail" style="background-image: url(/assets/img/deep_link_swiftui_01.jpg)" href="/swiftui-deep-linking/"></a>
+            
+            <div class="post-content">
+              <h2 class="post-title"><a href="/swiftui-deep-linking/">Programmatic navigation in SwiftUI project</a></h2>
+              <p></p>
+              <span class="post-date">2019, Nov 08&nbsp;&nbsp;&nbsp;—&nbsp;</span>
+              <span class="post-words">11 minute read</span>
+            </div>
+          </article>
+          
+        
+        <article class="post">
+          <a class="post-thumbnail" style="background-image: url(/assets/img/launch_001.jpg)" href="/"></a>
+          <div class="post-content">
+            <h2 class="post-title"><a href="/">Browse All Articles</a></h2>
+            <p></p>
+            <span class="post-date">Top iOS programming stuff, no kidding!</span>
+          </div>
+        </article>
+      </div>
+    </div> <!-- End Wrap Content -->
+  </div> <!-- End Page Content -->
+</article> <!-- End Article Page -->
+
+</div>
+
+  </div>
+</body>
+</html>
