@@ -1,6 +1,6 @@
-title: Alexey Naumov
+title: Oğuzhan Varsak
 description: >
-  iOS development best practices, software architecture design, functional reactive programming, Swift, SwiftUI, Combine, UIKit
+  iOS development
 permalink: ':title/'
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "http://oguzhanvarsak.github.io"
