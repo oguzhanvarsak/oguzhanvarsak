@@ -3,7 +3,7 @@ description: >
   iOS development best practices, software architecture design, functional reactive programming, Swift, SwiftUI, Combine, UIKit
 permalink: ':title/'
 baseurl: "" # the subpath of your site, e.g. /blog
-url: "http://nalexn.github.io"
+url: "http://oguzhanvarsak.github.io"
 site-twitter: #if your site has a twitter account, enter it here
 
 # Author Settings
@@ -12,12 +12,12 @@ author-img: profile-image.jpg # add your photo
 about-author: me
 social-twitter: nallexn
 social-stackoverflow: 2923345
-social-github: nalexn
-social-linkedin: nalexn
+social-github: oguzhanvarsak
+social-linkedin: oguzhanvarsak
 social-email: none
 
 # Disqus
-discus-identifier: nalexn
+discus-identifier: oguzhanvarsak
 
 # Tracker
 analytics: UA-96224610-1
