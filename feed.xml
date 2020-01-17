@@ -4,9 +4,9 @@
   <link rel="alternate" type="text/html" href="https://oguzhanvarsak.github.io/"/>
   <link rel="self" type="application/atom+xml" href="https://oguzhanvarsak.github.io/feed.xml"/>
   <icon>https://oguzhanvarsak.github.io/assets/img/favicon/favicon-114.png</icon>
-  <title>Alexey Naumov</title>
+  <title>Oğuzhan Varsak</title>
   <author>
-    <name>Alexey Naumov</name>
+    <name>Oğuzhan Varsak</name>
     <uri>https://oguzhanvarsak.github.io</uri>
   </author>
   <subtitle>iOS development best practices, software architecture design, functional reactive programming, Swift, SwiftUI, Combine</subtitle>
