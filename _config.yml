@@ -22,6 +22,9 @@ discus-identifier: nalexn
 # Tracker
 analytics: UA-96224610-1
 
+baseurl: /oguzhanvarsak
+url: https://oguzhanvarsak.github.io/
+
 # Build Settings
 markdown: kramdown
 kramdown:
