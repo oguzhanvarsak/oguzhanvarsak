@@ -147,5 +147,4 @@ after doing so, we can just remove the code from inside the method, this will ma
 
 ___
 
-[button text="DOWNLOAD" size="big" icon="fa-cloud-download" color="blue" url="com.oguzhanvarsak.whatsapptweak_0.0.1-1+debug_iphoneos-arm.deb
-3.41 KB"][button text="GITHUB" size="big" icon="fa-github" color="red" url="https://github.com/oguzhanvarsak/whatsappTweak"]
+Download Tweak : https://github.com/oguzhanvarsak/whatsappTweak
