@@ -1,4 +1,4 @@
-![Apple](https://img.shields.io/badge/Apple%20Developer-FFFFFF?style=flat&logo=apple&logoColor=black) ![iOS](https://img.shields.io/badge/iOS-414141?style=flat&logo=ios&logoColor=white) ![Swift](https://img.shields.io/badge/Swift-FA7343?style=flat&logo=swift&logoColor=white) ![ObjC](https://img.shields.io/badge/Objective%20C-1858BB?style=flat&logo=swift&logoColor=white)
+![Apple](https://img.shields.io/badge/Apple%20Developer-FFFFFF?style=flat&logo=apple&logoColor=black) ![iOS](https://img.shields.io/badge/iOS-414141?style=flat&logo=ios&logoColor=white) ![macOS](https://img.shields.io/badge/macOS-414141?style=flat&logo=macos&logoColor=white) ![Swift](https://img.shields.io/badge/Swift-FA7343?style=flat&logo=swift&logoColor=white) ![ObjC](https://img.shields.io/badge/Objective%20C-1858BB?style=flat&logo=swift&logoColor=white)
 ----------
 #### 🌍 Find Me Elsewhere
 [![Linkedin](https://img.shields.io/badge/LinkedIn-0077B5?style=flat&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/oguzhanvarsak)
