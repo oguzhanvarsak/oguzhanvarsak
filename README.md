@@ -9,7 +9,7 @@
 
 #### Stats
 
-[![Top Langs](https://github-readme-stats.vercel.app/api/top-langs/?username=oguzhanvarsak&theme=dark&hide=css,html,scss&langs_count=8&layout=compact)](https://github.com/oguzhanvarsak/github-readme-stats)  ![Hemant Joshi Github Stats](https://github-readme-stats.vercel.app/api?username=oguzhanvarsak&show_icons=true&theme=dark&hide=prs)
+![Top Langs](https://github-readme-stats.vercel.app/api/top-langs/?username=oguzhanvarsak&theme=dark&hide=css,html,scss&langs_count=8&layout=compact)  ![Hemant Joshi Github Stats](https://github-readme-stats.vercel.app/api?username=oguzhanvarsak&show_icons=true&theme=dark&hide=prs)
 ------------
 👇 Hit in your console or terminal to connect with me.
 
