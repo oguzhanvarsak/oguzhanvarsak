@@ -5,16 +5,17 @@
 [![Instagram](https://img.shields.io/badge/Instagram-E4405F?style=flat&logo=instagram&logoColor=white)](https://www.instagram.com/oguzhanvarsak) [![Twitter](https://img.shields.io/badge/Twitter-1DA1F2?style=fflat&logo=twitter&logoColor=white)](https://www.twitter.com/oguzhanvarsak)
 [![Reddit](https://img.shields.io/badge/Reddit-FF4500?style=flat&logo=reddit&logoColor=white)](https://www.reddit.com/oguzhanvarsak)
 [![StackOverflow](https://img.shields.io/badge/Stack_Overflow-FE7A16?style=flat&logo=stack-overflow&logoColor=white)](https://stackoverflow.com/users/13116047/edward-mordrake)
--------------
 
-#### Stats
-
-![Top Langs](https://github-readme-stats.vercel.app/api/top-langs/?username=oguzhanvarsak&theme=dark&hide=css,html,scss&langs_count=8&layout=compact)  ![Hemant Joshi Github Stats](https://github-readme-stats.vercel.app/api?username=oguzhanvarsak&show_icons=true&theme=dark&hide=prs)
-------------
-👇 Hit in your console or terminal to connect with me.
+#### 👇 Hit in your console or terminal to connect with me.
 
 ```bash
 npx oguzhanvarsak
 ```
+------------
+#### Stats
 
+![Top Langs](https://github-readme-stats.vercel.app/api/top-langs/?username=oguzhanvarsak&theme=dark&hide=css,html,scss&langs_count=8&layout=compact)  ![Hemant Joshi Github Stats](https://github-readme-stats.vercel.app/api?username=oguzhanvarsak&show_icons=true&theme=dark&hide=prs)
+------------
+
+#### 🏆 Github Profile Trophy
 ![trophy](https://github-profile-trophy.vercel.app/?username=oguzhanvarsak&theme=onedark&no-bg=true&margin-w=37)
