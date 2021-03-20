@@ -16,3 +16,5 @@
 ```bash
 npx oguzhanvarsak
 ```
+
+![trophy](https://github-profile-trophy.vercel.app/?username=oguzhanvarsak&theme=onedark&no-bg=true&margin-w=37)
