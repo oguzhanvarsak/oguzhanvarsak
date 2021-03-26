@@ -17,9 +17,6 @@ npx oguzhanvarsak
 ![Top Langs](https://github-readme-stats.vercel.app/api/top-langs/?username=oguzhanvarsak&theme=dark&hide=css,html,scss&langs_count=8&layout=compact)  ![Hemant Joshi Github Stats](https://github-readme-stats.vercel.app/api?username=oguzhanvarsak&show_icons=true&theme=dark&hide=prs)
 ------------
 
-#### 🏆 Github Profile Trophy
-![trophy](https://github-profile-trophy.vercel.app/?username=oguzhanvarsak&theme=onedark&no-bg=true&margin-w=37)
-
 #### 📭 My Latest Blog Posts
 - [How Apple Completely Prevented Users from Downgrading iOS](https://oguzhanvarsak.github.io/oguzhanvarsak/apple-prevented-downgrade/)
 - [Monitoring iOS HTTPS Network Traffic](https://oguzhanvarsak.github.io/oguzhanvarsak/monitoring-ios-https/)
