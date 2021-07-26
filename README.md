@@ -1,4 +1,4 @@
-![Apple](https://img.shields.io/badge/Apple%20Developer-FFFFFF?style=flat&logo=apple&logoColor=black) ![iOS](https://img.shields.io/badge/iOS-414141?style=flat&logo=ios&logoColor=white) ![macOS](https://img.shields.io/badge/macOS-414141?style=flat&logo=macos&logoColor=white) ![Swift](https://img.shields.io/badge/Swift-FA7343?style=flat&logo=swift&logoColor=white) ![ObjC](https://img.shields.io/badge/Objective%20C-1858BB?style=flat&logo=c&logoColor=white)
+<a href="https://www.turkmedya.com.tr/"> <img src="https://i.imgur.com/y0TN0Vk.png" alt="drawing"/></a>  <a href="https://apps.apple.com/us/developer/star-medya-yayıncılık/id468674489"> <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/67/App_Store_%28iOS%29.svg/2048px-App_Store_%28iOS%29.svg.png" alt="drawing" width="20"/></a> <img src="https://static.wixstatic.com/media/5feefe_3c87b09f5c0b4506a223dc1b9dfc08c5~mv2.png/v1/fill/w_614,h_609,al_c,lg_1/58482ce4cef1014c0b5e4a4c.png" alt="drawing" width="20"/>
 ----------
 #### 🌍 Find Me Elsewhere
 [![Linkedin](https://img.shields.io/badge/LinkedIn-0077B5?style=flat&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/oguzhanvarsak)
