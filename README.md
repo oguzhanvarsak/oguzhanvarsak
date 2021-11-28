@@ -14,7 +14,7 @@ npx oguzhanvarsak
 ------------
 
 #### 📈 Stats
-![Top Langs](https://github-readme-stats.vercel.app/api/top-langs/?username=oguzhanvarsak&theme=dark&hide=css,html,scss&langs_count=8&layout=compact)  ![Hemant Joshi Github Stats](https://github-readme-stats.vercel.app/api?username=oguzhanvarsak&show_icons=true&theme=dark&hide=prs)
+![Top Langs](https://github-readme-stats.vercel.app/api/top-langs/?username=oguzhanvarsak&theme=dark&hide=javascript,ruby,TSQL,css,html,scss&langs_count=8&layout=compact)  ![Hemant Joshi Github Stats](https://github-readme-stats.vercel.app/api?username=oguzhanvarsak&show_icons=true&theme=dark&hide=prs)
 ------------
 
 #### 📭 My Latest Blog Posts
