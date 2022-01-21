@@ -12,9 +12,10 @@
 npx oguzhanvarsak
 ```
 ------------
-
 #### 📈 Stats
 ![Top Langs](https://github-readme-stats.vercel.app/api/top-langs/?username=oguzhanvarsak&theme=dark&hide=javascript,ruby,TSQL,css,html,scss&langs_count=8&layout=compact)  ![Hemant Joshi Github Stats](https://github-readme-stats.vercel.app/api?username=oguzhanvarsak&show_icons=true&theme=dark&hide=prs)
+<div  align="center"> <img src="https://github.com/oguzhanvarsak/oguzhanvarsak/blob/output/github-contribution-grid-snake.svg" /></div>
+
 ------------
 
 #### 📭 My Latest Blog Posts
