@@ -19,7 +19,7 @@ npx oguzhanvarsak
 ------------
 
 #### 📭 My Latest Blog Posts
-- [Apple Wallet için Pass Oluşturulması ve Dizaynı](https://medium.com/@oguzhanvarsak/apple-wallet-için-pass-oluşturulması-ve-dizaynı-28ff7a62e5dc)
+- [Designing and Creating Pass for Apple Wallet](https://medium.com/@oguzhanvarsak/designing-and-creating-pass-for-apple-wallet-e2a0136b9254)
 - [How Apple Completely Prevented Users from Downgrading iOS](https://oguzhanvarsak.github.io/oguzhanvarsak/apple-prevented-downgrade/)
 - [Monitoring iOS HTTPS Network Traffic](https://oguzhanvarsak.github.io/oguzhanvarsak/monitoring-ios-https/)
 - [Developing an iOS 11 Substrate Tweak](https://oguzhanvarsak.github.io/oguzhanvarsak/developing-tweak/)
