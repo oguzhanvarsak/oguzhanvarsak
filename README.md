@@ -4,7 +4,7 @@
 [![Linkedin](https://img.shields.io/badge/LinkedIn-0077B5?style=flat&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/oguzhanvarsak)
 [![Instagram](https://img.shields.io/badge/Instagram-E4405F?style=flat&logo=instagram&logoColor=white)](https://www.instagram.com/oguzhanvarsak) [![Twitter](https://img.shields.io/badge/Twitter-1DA1F2?style=fflat&logo=twitter&logoColor=white)](https://www.twitter.com/oguzhanvarsak)
 [![Reddit](https://img.shields.io/badge/Reddit-FF4500?style=flat&logo=reddit&logoColor=white)](https://www.reddit.com/u/oguzhanvarsak)
-[![StackOverflow](https://img.shields.io/badge/Stack_Overflow-FE7A16?style=flat&logo=stack-overflow&logoColor=white)](https://stackoverflow.com/users/13116047/edward-mordrake) [![Apple](https://img.shields.io/badge/Apple%20Developer%20Forums-FFFFFF?style=flat&logo=apple&logoColor=black)](https://developer.apple.com/forums/profile/oguzhanvarsak) [![Spotify](https://img.shields.io/badge/Spotify-329021?style=flat&logo=spotify&logoColor=white)](https://open.spotify.com/user/11127798213?si=noTuO3wxTtynRtM7D8QNcg) [![Medium](https://img.shields.io/badge/Medium-12151A?style=flat&logo=medium&logoColor=white)](https://medium.com/@oguzhanvarsak) [![Blog](https://img.shields.io/badge/Blog-B35FD9?style=flat&logo=wordpress&logoColor=white)](https://oguzhanvarsak.github.io/oguzhanvarsak/) [![GithubGist](https://img.shields.io/badge/GitHub%20Gists-12151A?style=flat&logo=github&logoColor=white)](https://gist.github.com/oguzhanvarsak)
+[![StackOverflow](https://img.shields.io/badge/Stack_Overflow-FE7A16?style=flat&logo=stack-overflow&logoColor=white)](https://stackoverflow.com/users/13116047/edward-mordrake) [![Apple](https://img.shields.io/badge/Apple%20Developer%20Forums-FFFFFF?style=flat&logo=apple&logoColor=black)](https://developer.apple.com/forums/profile/oguzhanvarsak) [![Medium](https://img.shields.io/badge/Medium-12151A?style=flat&logo=medium&logoColor=white)](https://medium.com/@oguzhanvarsak) [![Blog](https://img.shields.io/badge/Blog-B35FD9?style=flat&logo=wordpress&logoColor=white)](https://oguzhanvarsak.github.io/oguzhanvarsak/) [![GithubGist](https://img.shields.io/badge/GitHub%20Gists-12151A?style=flat&logo=github&logoColor=white)](https://gist.github.com/oguzhanvarsak)
 
 #### 👇 Hit in your console or terminal to connect with me.
 
@@ -12,14 +12,13 @@
 npx oguzhanvarsak
 ```
 ------------
-#### 📈 Stats
-![Top Langs](https://github-readme-stats.vercel.app/api/top-langs/?username=oguzhanvarsak&theme=dark&hide=javascript,ruby,TSQL,css,html,scss&langs_count=8&layout=compact)  ![Hemant Joshi Github Stats](https://github-readme-stats.vercel.app/api?username=oguzhanvarsak&show_icons=true&theme=dark&hide=prs)
-<div  align="center"> <img src="https://github.com/oguzhanvarsak/oguzhanvarsak/blob/output/github-contribution-grid-snake.svg" /></div>
-
-------------
-
 #### 📭 My Latest Blog Posts
 - [Designing and Creating Pass for Apple Wallet](https://medium.com/@oguzhanvarsak/designing-and-creating-pass-for-apple-wallet-e2a0136b9254)
 - [How Apple Completely Prevented Users from Downgrading iOS](https://oguzhanvarsak.github.io/oguzhanvarsak/apple-prevented-downgrade/)
 - [Monitoring iOS HTTPS Network Traffic](https://oguzhanvarsak.github.io/oguzhanvarsak/monitoring-ios-https/)
 - [Developing an iOS 11 Substrate Tweak](https://oguzhanvarsak.github.io/oguzhanvarsak/developing-tweak/)
+
+------------
+#### 📈 Stats
+![Top Langs](https://github-readme-stats.vercel.app/api/top-langs/?username=oguzhanvarsak&theme=dark&hide=javascript,ruby,TSQL,css,html,scss&langs_count=8&layout=compact)
+<div  align="center"> <img src="https://github.com/oguzhanvarsak/oguzhanvarsak/blob/output/github-contribution-grid-snake.svg" /></div>
