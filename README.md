@@ -1,4 +1,4 @@
-<a href="https://www.digiturk.com.tr/"> <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/8f/Motorola_M_symbol_blue.svg/1200px-Motorola_M_symbol_blue.svg.png" alt="drawing" width="30"/></a>
+<a href="https://www.motorolasolutions.com/en_us.html"> <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/8f/Motorola_M_symbol_blue.svg/1200px-Motorola_M_symbol_blue.svg.png" alt="drawing" width="30"/></a>
 ----------
 #### 🌍 Find Me Elsewhere
 [![Linkedin](https://img.shields.io/badge/LinkedIn-0077B5?style=flat&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/oguzhanvarsak)
